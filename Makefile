@@ -9,3 +9,6 @@ lint-fix:
 
 webpack:
 	./node_modules/.bin/webpack
+
+build:
+	npm run build
