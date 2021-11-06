@@ -6,3 +6,6 @@ lint:
 	
 lint-fix:
 	npx eslint . --fix
+
+webpack:
+	./node_modules/.bin/webpack
