@@ -4,26 +4,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-const config = {
+module.exports = {
   entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-  },
-  devServer: {
-    open: true,
-    host: 'localhost',
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './index.html',
-    }),
-    new CleanWebpackPlugin(),
-
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
-  ],
   module: {
     rules: [
       {
@@ -39,17 +21,25 @@ const config = {
         use: ['style-loader', 'css-loader'],
       },
 
-      // Add your rules for custom modules here
-      // Learn more about loaders from https://webpack.js.org/loaders/
+    // Add your rules for custom modules here
+    // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
-};
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html',
+    }),
+    new CleanWebpackPlugin(),
 
-module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-  } else {
-    config.mode = 'development';
-  }
-  return config;
+  // Add your plugins here
+  // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+  ],
+  mode: 'production',
+  devServer: {
+    open: true,
+    host: 'localhost',
+  },
 };
