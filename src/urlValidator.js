@@ -1,5 +1,4 @@
-const validateURL = () => {
-  const input = document.querySelector('input .email');
+const validateURL = (input) => {
   input.addEventListener('change', (e) => {
     e.preventDefault();
     console.log('abobas');
