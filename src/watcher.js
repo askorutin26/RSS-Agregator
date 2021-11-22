@@ -21,7 +21,7 @@ const app = () => {
     renderForm(container, state.formState);
   });
   handler(watchedState, form);
-  http(state.formState.currentURL);
+  console.log(http(state.formState.currentURL));
 };
 
 export default app;

@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const http = (url) => {
-  axios.get(url).then((response) => response.data);
+const http = async (url) => {
+  const response = await axios.get(url);
+  return response.data;
 };
 
 export default http;
