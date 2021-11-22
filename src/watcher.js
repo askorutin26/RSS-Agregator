@@ -3,6 +3,7 @@ import renderForm from './view.js';
 import handler from './handler.js';
 import http from './ajax.js';
 import parseRSS from './rssParser.js';
+import { renderFeedBlock } from './view.js';
 
 const state = {
   formState: {
@@ -16,12 +17,13 @@ const state = {
 
 const app = () => {
   const form = document.querySelector('.rss-form');
-  const container = document.querySelector('div.col-md-10');
+  const formContainer = document.querySelector('div.col-md-10');
+  const feedContainer = document.querySelector()
 
   const watchedState = onChange(state, (path, value, previousValue) => {
-    renderForm(container, state.formState);
+    renderForm(formContainer, state.formState);
     const test = http(state.formState.currentURL);
-    test.then((response) => console.log(parseRSS(response.data)));
+    test.then((response) => console.log(renderFeedBlock(feedContainer, parseRSS(response.data))));
   });
   handler(watchedState, form);
 };
