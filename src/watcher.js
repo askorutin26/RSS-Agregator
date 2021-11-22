@@ -2,6 +2,7 @@ import onChange from 'on-change';
 import renderForm from './view.js';
 import handler from './handler.js';
 import http from './ajax.js';
+import parseRSS from './rssParser.js';
 
 const state = {
   formState: {
@@ -20,7 +21,7 @@ const app = () => {
   const watchedState = onChange(state, (path, value, previousValue) => {
     renderForm(container, state.formState);
     const test = http(state.formState.currentURL);
-    test.then((response) => console.log(response.data));
+    test.then((response) => console.log(parseRSS(response.data)));
   });
   handler(watchedState, form);
 };
