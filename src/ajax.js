@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const http = (url) => {
-  console.log(url);
+  return axios.get(url);
 };
 
 export default http;

@@ -4,7 +4,6 @@ export default (state, element) => {
   const watchedState = state;
   element.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const input = document.querySelector('input');
     const { value } = input;
     const urlArr = watchedState.formState.previousURLS;
