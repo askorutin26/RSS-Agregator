@@ -22,7 +22,7 @@ const app = () => {
   const watchedState = onChange(state, (path, value, previousValue) => {
     renderForm(formContainer, state.formState);
     const test = http(state.formState.currentURL);
-    test.then((response) => console.log(parseRSS(response.data)));
+    test.then((response) => renderFeedBlock(feedContainer, parseRSS(response)));
   });
   handler(watchedState, form);
 };
