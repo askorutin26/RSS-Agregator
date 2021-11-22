@@ -20,7 +20,7 @@ const app = () => {
   const watchedState = onChange(state, (path, value, previousValue) => {
     renderForm(container, state.formState);
     const test = http(state.formState.currentURL);
-    test.then(console.log);
+    test.then((response) => response.data);
   });
   handler(watchedState, form);
 };
