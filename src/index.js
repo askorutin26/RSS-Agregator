@@ -1,4 +1,4 @@
 import 'bootstrap';
-import fn from './init.js';
+import app from './watcher.js';
 
-fn();
+app();
