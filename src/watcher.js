@@ -22,6 +22,7 @@ const app = () => {
   });
   handler(watchedState, form);
   console.log(http(state.formState.currentURL));
+  console.log('aboba')
 };
 
 export default app;
