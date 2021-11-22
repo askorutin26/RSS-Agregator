@@ -11,6 +11,7 @@ export default {
         urlErr: 'Link must be valid URL',
         alreadyExists: 'RSS already exists',
       },
+      feeds: 'Feeds',
 
     },
   },
@@ -26,6 +27,7 @@ export default {
         urlErr: 'Ссылка должна быть валидным URL',
         alreadyExists: 'RSS уже добавлен',
       },
+      feeds: 'Фиды',
     },
   },
 };
