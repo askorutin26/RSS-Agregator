@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 
-const validateURL = (state) => {
-  const urlArr = state.formState.urls;
-  const url = state.formState.currentUrl;
+const validateURL = (url, urlArr) => {
   const schema = yup.string().url().required().notOneOf(urlArr);
-  const valid = schema.isValidSync(url);
-  return valid;
+  try { schema.validateSync(url); } catch (err) {
+    return err.message;
+  }
+  return 'valid';
 };
 export default validateURL;
