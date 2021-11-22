@@ -19,7 +19,7 @@ const app = () => {
 
   const watchedState = onChange(state, (path, value, previousValue) => {
     renderForm(container, state.formState);
-    console.log(http(state.formState.currentURL));
+    http(state.formState.currentURL).then(console.log);
     console.log('aboba');
   });
   handler(watchedState, form);
