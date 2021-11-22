@@ -1,9 +1,8 @@
 import onChange from 'on-change';
-import renderForm from './view.js';
+import { renderForm, renderFeedBlock } from './view.js';
 import handler from './handler.js';
 import http from './ajax.js';
 import parseRSS from './rssParser.js';
-import { renderFeedBlock } from './view.js';
 
 const state = {
   formState: {
@@ -18,7 +17,7 @@ const state = {
 const app = () => {
   const form = document.querySelector('.rss-form');
   const formContainer = document.querySelector('div.col-md-10');
-  const feedContainer = document.querySelector()
+  const feedContainer = document.querySelector('div.order-0');
 
   const watchedState = onChange(state, (path, value, previousValue) => {
     renderForm(formContainer, state.formState);
