@@ -68,7 +68,7 @@ const createExampleBlock = () => {
   return p;
 };
 
-const renderForm = (container, state) => {
+export const renderForm = (container, state) => {
   const input = createInput(state);
   const addBtn = createAddBtn();
   const label = createLabel();
@@ -105,4 +105,30 @@ const renderForm = (container, state) => {
   container.append(result);
 };
 
-export default renderForm;
+export const renderFeedBlock = (container, document) => {
+  const divContainer = document.createElement('div');
+  divContainer.classList.add('card-border-0');
+
+  const cardDiv = document.createElement('div');
+  const h2 = document.createElement('h2');
+  h2.classList.add('card-title', 'h4');
+  h2.textContent = i18next.t('feeds');
+  cardDiv.append(h2);
+  divContainer.append(cardDiv);
+
+  const ul = document.createElement('ul');
+  ul.classList.add('list-group', 'border-0', 'rounded-0');
+  const li = document.createElement('li');
+  li.classList.add('list-group-item', 'border-0', 'border-end-0');
+  const h3 = document.createElement('h3');
+  h3.classList.add('h-6', 'm-0');
+  const p = document.createElement('p');
+  p.classList.add('m-0', 'small', 'text-black-50');
+  p.textContent = document.title;
+  li.append(h3);
+  li.append(p);
+  ul.append(li);
+  divContainer.append(ul);
+  container.textContent = '';
+  container.append(divContainer);
+};
