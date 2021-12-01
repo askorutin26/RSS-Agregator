@@ -1,5 +1,5 @@
 import axios from 'axios';
 
-const http = (url) => axios.get(url);
+const makeQueryForRss = (url) => axios.get(url);
 
-export default http;
+export default makeQueryForRss;
