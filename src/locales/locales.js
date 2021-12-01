@@ -12,6 +12,8 @@ export default {
         alreadyExists: 'RSS already exists',
       },
       feeds: 'Feeds',
+      posts: 'Posts',
+      postBtn: 'Watch',
 
     },
   },
@@ -28,6 +30,8 @@ export default {
         alreadyExists: 'RSS уже добавлен',
       },
       feeds: 'Фиды',
+      posts: 'Посты',
+      postBtn: 'Просмотр',
     },
   },
 };
