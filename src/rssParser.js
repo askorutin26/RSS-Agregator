@@ -1,14 +1,16 @@
 const parseRSS = (xml) => {
   const domParser = new DOMParser();
-  const doc = domParser.parseFromString(xml, 'text/html');
+  const doc = domParser.parseFromString(xml, 'text/xml');
 
-  const title = doc.querySelector('title').textContent;
-  const description = doc.querySelector('description').textContent;
+  const titleElem = doc.querySelector('title');
+  const title = titleElem.textContent;
+  const descriptionElem = doc.querySelector('description');
+  const description = descriptionElem.textContent;
 
   const posts = Array.from(doc.querySelectorAll('item'));
 
   const postElems = posts.map((post) => {
-    const postTitle = post.textContent;
+    const postTitle = post.querySelector('title').textContent;
     const postLink = post.querySelector('link').textContent;
     const postDescription = post.querySelector('description').textContent;
     return {
