@@ -18,7 +18,9 @@ const createInput = (state) => {
   const input = document.createElement('input');
   input.setAttribute('id', 'url-input');
   input.setAttribute('name', 'url');
-  input.setAttribute('autofocus', 'true');
+  if (state.valid === 'invalid') {
+    input.setAttribute('autofocus', 'false');
+  } else { input.setAttribute('autofocus', 'true'); }
   input.setAttribute('required', 'true');
   input.setAttribute('placeholder', i18next.t('placeholder'));
   input.setAttribute('aria-label', 'url');
@@ -43,6 +45,7 @@ const createResultBlock = (state) => {
     p.classList.add('text-success');
     p.textContent = i18next.t(`validation.${state.valid}`);
   }
+
   return p;
 };
 
@@ -105,11 +108,12 @@ export const renderForm = (container, state) => {
   container.append(result);
 };
 
-export const renderFeedBlock = (container, document) => {
+export const renderFeedBlock = (container, state) => {
   const divContainer = document.createElement('div');
   divContainer.classList.add('card-border-0');
 
   const cardDiv = document.createElement('div');
+  cardDiv.classList.add('card-body');
   const h2 = document.createElement('h2');
   h2.classList.add('card-title', 'h4');
   h2.textContent = i18next.t('feeds');
@@ -121,14 +125,65 @@ export const renderFeedBlock = (container, document) => {
   const li = document.createElement('li');
   li.classList.add('list-group-item', 'border-0', 'border-end-0');
   const h3 = document.createElement('h3');
-  h3.classList.add('h-6', 'm-0');
+  h3.classList.add('h6', 'm-0');
+  h3.textContent = state.feedTitle;
   const p = document.createElement('p');
   p.classList.add('m-0', 'small', 'text-black-50');
-  p.textContent = document.title;
+  p.textContent = state.feedDescription;
   li.append(h3);
   li.append(p);
   ul.append(li);
   divContainer.append(ul);
   container.textContent = '';
   container.append(divContainer);
+};
+
+export const renderPostBlock = (container, posts) => {
+  const divContainer = document.createElement('div');
+  divContainer.classList.add('card', 'border-0');
+
+  const divCard = document.createElement('div');
+  divCard.classList.add('card-body');
+  const h2 = document.createElement('h2');
+  h2.classList.add('card-title', 'h4');
+  h2.textContent = i18next.t('posts');
+
+  divCard.append(h2);
+  divContainer.append(divCard);
+
+  const ul = document.createElement('ul');
+  ul.classList.add('list-group', 'border-0', 'rounded-0');
+  const liContainer = document.createDocumentFragment();
+  const liElems = posts;
+  liElems.map((elem) => {
+    const { post } = elem;
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const a = document.createElement('a');
+    a.setAttribute('href', post.link);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener', 'noreferrer');
+    a.classList.add('fw-bold');
+    a.textContent = post.title;
+
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#modal');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.textContent = i18next.t('postBtn');
+    li.append(a);
+    li.append(button);
+    liContainer.append(li);
+  });
+  ul.append(liContainer);
+  divContainer.append(ul);
+
+  container.append(divContainer);
+};
+
+const renderModal = (container) => {
+  const title = container.querySelector('h5.modal-title');
+  const description = container.querySelector('.modal-body');
+  const link = container.querySelector('.full-article');
 };
