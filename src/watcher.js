@@ -36,6 +36,7 @@ const app = () => {
         updatePosts(5000);
       }, timeout);
     };
+    const timeout = 5000;
     switch (path) {
       case 'formState.valid':
       case 'formState.state':
@@ -48,7 +49,7 @@ const app = () => {
       case 'posts':
         renderPostBlock(postsContainer, watchedState);
         postBtnHandler(watchedState);
-        updatePosts(5000);
+        updatePosts(postsContainer, timeout);
         break;
       case 'modals.currentId':
         renderModal(modal, watchedState.modals, watchedState.posts);

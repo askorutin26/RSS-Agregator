@@ -125,6 +125,7 @@ export const renderFeedBlock = (container, state) => {
 };
 
 export const renderPostBlock = (container, state) => {
+  console.log('posts rendered');
   const divContainer = document.createElement('div');
   divContainer.classList.add('card', 'border-0');
 
@@ -167,7 +168,7 @@ export const renderPostBlock = (container, state) => {
   liContainer.append(...liCollection);
   ul.append(liContainer);
   divContainer.append(ul);
-
+  container.textContent = '';
   container.append(divContainer);
 };
 

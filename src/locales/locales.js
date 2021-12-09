@@ -7,7 +7,7 @@ export default {
       addBtn: 'Add',
       example: 'Example: https://ru.hexlet.io/lessons.rss',
       validation: {
-        valid: 'RSS loaded!',
+        valid: 'RSS successfully loaded',
         urlErr: 'Link must be valid URL',
         alreadyExists: 'RSS already exists',
       },
@@ -25,7 +25,7 @@ export default {
       addBtn: 'Добавить',
       example: 'Пример: https://ru.hexlet.io/lessons.rss',
       validation: {
-        valid: 'RSS загружена!',
+        valid: 'RSS успешно загружен',
         urlErr: 'Ссылка должна быть валидным URL',
         alreadyExists: 'RSS уже добавлен',
       },
