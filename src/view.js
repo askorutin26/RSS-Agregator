@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import i18next from 'i18next';
+import { head } from 'lodash';
 import './i18n';
 
 const createTitle = () => {
@@ -30,6 +31,10 @@ const createInput = (state) => {
   input.value = state.currentURL;
   if (state.error.length !== 0) {
     input.classList.add('is-invalid');
+  }
+  if (state.state === 'finished') {
+    input.value = '';
+    input.setAttribute('autofocus', 'true');
   }
 
   return input;
@@ -71,24 +76,21 @@ const createExampleBlock = () => {
   return p;
 };
 
-export const renderForm = (container, state) => {
+export const renderForm = (form, state) => {
   const input = createInput(state);
   const addBtn = createAddBtn();
   const label = createLabel();
   const example = createExampleBlock();
   const result = createResultBlock(state);
-  const [title, description] = createTitle();
-
-  const form = document.createElement('form');
-  form.classList.add('rss-form', 'text-body');
-
   const divRow = document.createElement('div');
   divRow.classList.add('row');
 
   const divCol = document.createElement('div');
   divCol.classList.add('col');
+
   const divForm = document.createElement('div');
   divForm.classList.add('form-floating');
+
   divForm.append(input);
   divForm.append(label);
   divCol.append(divForm);
@@ -99,13 +101,10 @@ export const renderForm = (container, state) => {
 
   divRow.append(divCol);
   divRow.append(divColAuto);
+  form.innerHTML = '';
   form.append(divRow);
-  container.innerHTML = '';
-  container.append(title);
-  container.append(description);
-  container.append(form);
-  container.append(example);
-  container.append(result);
+  form.append(example);
+  form.append(result);
 };
 
 export const renderFeedBlock = (container, state) => {
@@ -138,7 +137,7 @@ export const renderFeedBlock = (container, state) => {
   container.append(divContainer);
 };
 
-export const renderPostBlock = (container, posts) => {
+export const renderPostBlock = (container, state) => {
   const divContainer = document.createElement('div');
   divContainer.classList.add('card', 'border-0');
 
@@ -154,15 +153,19 @@ export const renderPostBlock = (container, posts) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   const liContainer = document.createDocumentFragment();
-  const liElems = posts;
-  liElems.map((elem) => {
-    const { post } = elem;
+  const { posts, modals } = state;
+  const { currentId } = modals;
+  posts.map((elem) => {
+    const { post, id } = elem;
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     const a = document.createElement('a');
     a.setAttribute('href', post.link);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener', 'noreferrer');
+    a.setAttribute('id', id);
+    console.log(id);
+    console.log(currentId);
     a.classList.add('fw-bold');
     a.textContent = post.title;
 
@@ -170,6 +173,7 @@ export const renderPostBlock = (container, posts) => {
     button.setAttribute('type', 'button');
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
+    button.setAttribute('id', id);
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.textContent = i18next.t('postBtn');
     li.append(a);
@@ -182,8 +186,31 @@ export const renderPostBlock = (container, posts) => {
   container.append(divContainer);
 };
 
-const renderModal = (container) => {
-  const title = container.querySelector('h5.modal-title');
-  const description = container.querySelector('.modal-body');
-  const link = container.querySelector('.full-article');
+export const renderModal = (container, postId, posts) => {
+  const { currentId } = postId;
+
+  const currentPost = posts.filter((elem) => {
+    const { id, post } = elem;
+    if (id === currentId) {
+      return true;
+    } return false;
+  });
+
+  const { title, link, description } = currentPost[0].post;
+  const header = container.querySelector('.modal-header');
+  const headerTitle = header.querySelector('.modal-title');
+  headerTitle.textContent = title;
+
+  const body = container.querySelector('.modal-body');
+  body.textContent = description;
+
+  const footer = container.querySelector('.modal-footer');
+  const footerLink = footer.querySelector('a.full-article');
+  footerLink.setAttribute('href', link);
+};
+
+export const btnWatched = (container, id) => {
+  const buttonToReRender = container.querySelector(`#${id}`);
+  buttonToReRender.classList.remove('fw-bold');
+  buttonToReRender.classList.add('fw-normal');
 };
