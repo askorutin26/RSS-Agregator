@@ -1,7 +1,6 @@
 import onChange from 'on-change';
-import { values } from 'lodash';
 import {
-  renderForm, renderFeedBlock, renderPostBlock, renderModal, btnWatched
+  renderForm, renderFeedBlock, renderPostBlock, renderModal, btnWatched,
 } from './view.js';
 import { formHandler, postBtnHandler } from './handler.js';
 
@@ -30,10 +29,10 @@ const app = () => {
   const feedContainer = document.querySelector('div.feeds');
   const postsContainer = document.querySelector('div.posts');
 
-  const watchedState = onChange(state, (path, value, previousValue) => {
+  const watchedState = onChange(state, (path) => {
     const updatePosts = (timeout) => {
       setTimeout(() => {
-        renderPostBlock(postsContainer, watchedState.posts);
+        renderPostBlock(postsContainer, watchedState);
         updatePosts(5000);
       }, timeout);
     };
@@ -49,10 +48,11 @@ const app = () => {
       case 'posts':
         renderPostBlock(postsContainer, watchedState);
         postBtnHandler(watchedState);
+        updatePosts(5000);
         break;
       case 'modals.currentId':
         renderModal(modal, watchedState.modals, watchedState.posts);
-        btnWatched(postsContainer,watchedState.modals.currentId);
+        btnWatched(postsContainer, watchedState.modals.currentId);
         break;
       default:
         break;

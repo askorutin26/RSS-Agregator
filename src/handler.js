@@ -42,7 +42,6 @@ export const formHandler = (state, elements) => {
     watchedState.formState.state = 'processing';
 
     const validationResult = validateURL(value, urlArr);
-    console.log(validationResult);
     if (validationResult === 'valid') {
       watchedState.formState.valid = 'valid';
       watchedState.formState.previousURLS.push(value);
@@ -60,7 +59,7 @@ export const formHandler = (state, elements) => {
 export const postBtnHandler = (state) => {
   const watchedState = state;
   const watched = [];
-  const { posts, modals } = watchedState;
+  const { modals } = watchedState;
   const buttons = document.querySelectorAll('button[data-bs-toggle="modal"]');
   buttons.forEach((btn) => {
     btn.addEventListener('click', (e) => {

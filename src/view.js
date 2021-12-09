@@ -1,20 +1,7 @@
 /* eslint-disable no-param-reassign */
 import i18next from 'i18next';
-import { head } from 'lodash';
 import './i18n';
 
-const createTitle = () => {
-  const title = document.createElement('h1');
-  title.classList.add('display-3', 'mb-0');
-  title.textContent = i18next.t('title');
-
-  const description = document.createElement('p');
-  description.classList.add('lead');
-  description.textContent = i18next.t('description');
-
-  const elements = [title, description];
-  return elements;
-};
 const createInput = (state) => {
   const input = document.createElement('input');
   input.setAttribute('id', 'url-input');
@@ -153,9 +140,8 @@ export const renderPostBlock = (container, state) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   const liContainer = document.createDocumentFragment();
-  const { posts, modals } = state;
-  const { currentId } = modals;
-  posts.map((elem) => {
+  const { posts } = state;
+  const liCollection = posts.map((elem) => {
     const { post, id } = elem;
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -164,8 +150,6 @@ export const renderPostBlock = (container, state) => {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener', 'noreferrer');
     a.setAttribute('id', id);
-    console.log(id);
-    console.log(currentId);
     a.classList.add('fw-bold');
     a.textContent = post.title;
 
@@ -178,8 +162,9 @@ export const renderPostBlock = (container, state) => {
     button.textContent = i18next.t('postBtn');
     li.append(a);
     li.append(button);
-    liContainer.append(li);
+    return li;
   });
+  liContainer.append(...liCollection);
   ul.append(liContainer);
   divContainer.append(ul);
 
@@ -190,7 +175,7 @@ export const renderModal = (container, postId, posts) => {
   const { currentId } = postId;
 
   const currentPost = posts.filter((elem) => {
-    const { id, post } = elem;
+    const { id } = elem;
     if (id === currentId) {
       return true;
     } return false;
