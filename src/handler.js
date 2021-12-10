@@ -24,6 +24,9 @@ const loadPosts = (state) => {
     watchedState.feed = feed;
     watchedState.posts = posts;
     watchedState.formState.state = 'finished';
+  }).catch((error) => {
+    watchedState.formState.state = 'invalid';
+    watchedState.formState.networkError = error.message;
   });
 };
 
@@ -39,18 +42,18 @@ export const formHandler = (state, elements) => {
 
     const urlArr = watchedState.formState.previousURLS;
     watchedState.formState.currentURL = value;
-    watchedState.formState.state = 'processing';
 
+    watchedState.formState.state = 'processing';
     const validationResult = validateURL(value, urlArr);
     if (validationResult === 'valid') {
       watchedState.formState.valid = 'valid';
       watchedState.formState.previousURLS.push(value);
       loadPosts(watchedState, elements);
     } else if (validationResult === 'this must be a valid URL') {
-      watchedState.formState.error = 'urlErr';
+      watchedState.formState.validationError = 'urlErr';
       watchedState.formState.valid = 'invalid';
     } else {
-      watchedState.formState.error = 'alreadyExists';
+      watchedState.formState.validationError = 'alreadyExists';
       watchedState.formState.valid = 'invalid';
     }
   });

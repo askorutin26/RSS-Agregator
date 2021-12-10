@@ -10,7 +10,8 @@ const state = {
     previousURLS: [],
     state: '',
     valid: '',
-    error: '',
+    validationError: '',
+    networkError: '',
   },
   feed: {
     feedTitle: '',
@@ -40,7 +41,10 @@ const app = () => {
     switch (path) {
       case 'formState.valid':
       case 'formState.state':
-      case 'formState.error':
+      case 'formState.validationError':
+        renderForm(form, state.formState);
+        break;
+      case 'formState.networkError':
         renderForm(form, state.formState);
         break;
       case 'feed':

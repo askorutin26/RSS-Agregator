@@ -16,7 +16,7 @@ const createInput = (state) => {
   input.setAttribute('aria-describedly', 'button-addon');
   input.classList.add('form-control', 'w-100');
   input.value = state.currentURL;
-  if (state.error.length !== 0) {
+  if (state.validationError.length !== 0) {
     input.classList.add('is-invalid');
   }
   if (state.state === 'finished') {
@@ -32,12 +32,15 @@ const createResultBlock = (state) => {
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
   if (state.valid === 'invalid') {
     p.classList.add('text-danger');
-    p.textContent = i18next.t(`validation.${state.error}`);
-  } else if (state.valid === 'valid') {
+    p.textContent = i18next.t(`validation.${state.validationError}`);
+  } else if (state.state === 'finished') {
     p.classList.add('text-success');
     p.textContent = i18next.t(`validation.${state.valid}`);
+  } else if (state.networkError.length !== 0) {
+    console.log('cukkkkkaaaa');
+    p.classList.add('text-danger');
+    p.textContent = i18next.t('validation.networkError');
   }
-
   return p;
 };
 
@@ -125,7 +128,6 @@ export const renderFeedBlock = (container, state) => {
 };
 
 export const renderPostBlock = (container, state) => {
-  console.log('posts rendered');
   const divContainer = document.createElement('div');
   divContainer.classList.add('card', 'border-0');
 
