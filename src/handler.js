@@ -8,6 +8,7 @@ const loadPosts = (state) => {
   const url = state.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data);
+    console.log(rssData);
     const feedTitle = rssData.title;
     const feedDescription = rssData.description;
     const feedPosts = rssData.postElems;

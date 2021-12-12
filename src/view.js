@@ -37,7 +37,6 @@ const createResultBlock = (state) => {
     p.classList.add('text-success');
     p.textContent = i18next.t(`validation.${state.valid}`);
   } else if (state.networkError.length !== 0) {
-    console.log('cukkkkkaaaa');
     p.classList.add('text-danger');
     p.textContent = i18next.t('validation.networkError');
   }
