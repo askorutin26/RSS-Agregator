@@ -29,6 +29,7 @@ const loadPosts = (state) => {
     }
   }).catch((error) => {
     watchedState.formState.networkError = true;
+    console.log(error);
   });
 };
 

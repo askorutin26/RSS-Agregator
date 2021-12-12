@@ -47,7 +47,7 @@ const createResultBlock = (state) => {
   return p;
 };
 
-const createAddBtn = (state) => {
+const createAddBtn = () => {
   const button = document.createElement('button');
   button.setAttribute('type', 'submit');
   button.setAttribute('aria-label', 'add');
