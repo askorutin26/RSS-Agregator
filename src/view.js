@@ -28,22 +28,26 @@ const createInput = (state) => {
 };
 
 const createResultBlock = (state) => {
+  console.log(state);
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
   if (state.valid === 'invalid') {
     p.classList.add('text-danger');
     p.textContent = i18next.t(`validation.${state.validationError}`);
-  } else if (state.state === 'finished') {
+  } else if (state.state === 'finished' && state.valid === 'valid') {
     p.classList.add('text-success');
     p.textContent = i18next.t(`validation.${state.valid}`);
-  } else if (state.networkError.length !== 0) {
+  } else if (state.networkError === true) {
     p.classList.add('text-danger');
     p.textContent = i18next.t('validation.networkError');
+  } else if (state.parsingError === true) {
+    p.classList.add('text-danger');
+    p.textContent = i18next.t('validation.parsingError');
   }
   return p;
 };
 
-const createAddBtn = () => {
+const createAddBtn = (state) => {
   const button = document.createElement('button');
   button.setAttribute('type', 'submit');
   button.setAttribute('aria-label', 'add');
@@ -67,7 +71,7 @@ const createExampleBlock = () => {
 
 export const renderForm = (form, state) => {
   const input = createInput(state);
-  const addBtn = createAddBtn();
+  const addBtn = createAddBtn(state);
   const label = createLabel();
   const example = createExampleBlock();
   const result = createResultBlock(state);

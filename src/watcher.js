@@ -12,6 +12,7 @@ const state = {
     valid: '',
     validationError: '',
     networkError: '',
+    parsingError: '',
   },
   feed: {
     feedTitle: '',
@@ -31,6 +32,7 @@ const app = () => {
   const postsContainer = document.querySelector('div.posts');
 
   const watchedState = onChange(state, (path) => {
+    console.log(`PATH: ${path}`);
     const updatePosts = (timeout) => {
       setTimeout(() => {
         renderPostBlock(postsContainer, watchedState);
@@ -45,6 +47,10 @@ const app = () => {
         renderForm(form, state.formState);
         break;
       case 'formState.networkError':
+        renderForm(form, state.formState);
+        break;
+      case 'formState.parsingError':
+        console.log('parsing error!!!!!!!');
         renderForm(form, state.formState);
         break;
       case 'feed':

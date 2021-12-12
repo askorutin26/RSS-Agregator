@@ -8,46 +8,46 @@ const loadPosts = (state) => {
   const url = state.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data);
-    console.log(rssData);
-    const feedTitle = rssData.title;
-    const feedDescription = rssData.description;
-    const feedPosts = rssData.postElems;
+    console.log(`rssData:${rssData}`);
+    if (rssData === 'parsererror') { watchedState.formState.parsingError = true; } else {
+      const feedTitle = rssData.title;
+      const feedDescription = rssData.description;
+      const feedPosts = rssData.postElems;
 
-    const feed = {
-      feedTitle,
-      feedDescription,
-      id: _.uniqueId('feed_'),
-    };
-    const posts = feedPosts.map((post) => {
-      const id = _.uniqueId('post_');
-      return { id, post };
-    });
-    watchedState.feed = feed;
-    watchedState.posts = posts;
-    watchedState.formState.state = 'finished';
+      const feed = {
+        feedTitle,
+        feedDescription,
+        id: _.uniqueId('feed_'),
+      };
+      const posts = feedPosts.map((post) => {
+        const id = _.uniqueId('post_');
+        return { id, post };
+      });
+      watchedState.feed = feed;
+      watchedState.posts = posts;
+      watchedState.formState.state = 'finished';
+    }
   }).catch((error) => {
-    watchedState.formState.state = 'invalid';
-    watchedState.formState.networkError = error.message;
+    watchedState.formState.networkError = true;
   });
 };
 
 export const formHandler = (state, elements) => {
   const watchedState = state;
   const form = elements;
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const input = document.querySelector('input');
+    const input = form.querySelector('input');
+    watchedState.formState.state = 'processing';
     const { value } = input;
-
     const urlArr = watchedState.formState.previousURLS;
     watchedState.formState.currentURL = value;
 
-    watchedState.formState.state = 'processing';
     const validationResult = validateURL(value, urlArr);
     if (validationResult === 'valid') {
       watchedState.formState.valid = 'valid';
+      watchedState.formState.validationError = '';
       watchedState.formState.previousURLS.push(value);
       loadPosts(watchedState, elements);
     } else if (validationResult === 'this must be a valid URL') {

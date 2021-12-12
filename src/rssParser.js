@@ -2,9 +2,7 @@ const parseRSS = (xml) => {
   const domParser = new DOMParser();
   const doc = domParser.parseFromString(xml, 'application/xml');
   const error = doc.querySelector('parsererror');
-  console.log(`error:${error.textContent}`);
-  console.log(doc);
-
+  if (error !== null) { return error.nodeName; }
   const titleElem = doc.querySelector('title');
   const title = titleElem.textContent;
   const descriptionElem = doc.querySelector('description');
