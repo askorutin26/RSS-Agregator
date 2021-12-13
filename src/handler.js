@@ -8,7 +8,6 @@ const loadPosts = (state) => {
   const url = state.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data);
-    console.log(`rssData:${rssData}`);
     if (rssData === 'parsererror') { watchedState.formState.parsingError = true; } else {
       const feedTitle = rssData.title;
       const feedDescription = rssData.description;
@@ -27,18 +26,17 @@ const loadPosts = (state) => {
       watchedState.posts = posts;
       watchedState.formState.state = 'finished';
     }
-  }).catch((error) => {
+  }).catch(() => {
     watchedState.formState.networkError = true;
-    console.log(error);
   });
 };
 
 export const formHandler = (state, elements) => {
   const watchedState = state;
   const form = elements;
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const input = form.querySelector('input');
     watchedState.formState.state = 'processing';
     const { value } = input;
@@ -46,6 +44,7 @@ export const formHandler = (state, elements) => {
     watchedState.formState.currentURL = value;
 
     const validationResult = validateURL(value, urlArr);
+
     if (validationResult === 'valid') {
       watchedState.formState.valid = 'valid';
       watchedState.formState.validationError = '';
@@ -63,16 +62,34 @@ export const formHandler = (state, elements) => {
 
 export const postBtnHandler = (state) => {
   const watchedState = state;
-  const watched = [];
   const { modals } = watchedState;
   const buttons = document.querySelectorAll('button[data-bs-toggle="modal"]');
   buttons.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+
+      const currentBtnId = e.target.getAttribute('id');
+
+      if (!modals.watchedPosts.includes(currentBtnId)) {
+        modals.watchedPosts.push(currentBtnId);
+      }
+      modals.clickedId = currentBtnId;
+    });
+  });
+};
+
+export const linkHandler = (state) => {
+  const wathcedState = state;
+  const { modals } = wathcedState;
+
+  const links = document.querySelectorAll('a');
+  links.forEach((link) => {
+    link.addEventListener('click', (e) => {
       const id = e.target.getAttribute('id');
-      watched.push(id);
-      modals.currentId = id;
-      modals.watchedPosts.push(id);
+      if (!modals.watchedPosts.includes(id)) {
+        modals.watchedPosts.push(id);
+      }
+      modals.clickedId = id;
     });
   });
 };

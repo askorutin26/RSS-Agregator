@@ -28,7 +28,6 @@ const createInput = (state) => {
 };
 
 const createResultBlock = (state) => {
-  console.log(state);
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
   if (state.valid === 'invalid') {
@@ -156,9 +155,10 @@ export const renderPostBlock = (container, state) => {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener', 'noreferrer');
     a.setAttribute('id', id);
-    a.classList.add('fw-bold');
+    if (state.modals.watchedPosts.includes(id)) {
+      a.classList.add('fw-normal');
+    } else { a.classList.add('fw-bold'); }
     a.textContent = post.title;
-
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
     button.setAttribute('data-bs-toggle', 'modal');
@@ -177,12 +177,11 @@ export const renderPostBlock = (container, state) => {
   container.append(divContainer);
 };
 
-export const renderModal = (container, postId, posts) => {
-  const { currentId } = postId;
-
+export const renderModal = (container, modals, posts) => {
+  const { watchedPosts } = modals;
   const currentPost = posts.filter((elem) => {
     const { id } = elem;
-    if (id === currentId) {
+    if (watchedPosts.includes(id)) {
       return true;
     } return false;
   });

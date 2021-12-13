@@ -2,7 +2,7 @@ import onChange from 'on-change';
 import {
   renderForm, renderFeedBlock, renderPostBlock, renderModal, btnWatched,
 } from './view.js';
-import { formHandler, postBtnHandler } from './handler.js';
+import { formHandler, postBtnHandler, linkHandler } from './handler.js';
 
 const state = {
   formState: {
@@ -20,7 +20,7 @@ const state = {
   },
   posts: [],
   modals: {
-    currentId: '',
+    clickedId: [],
     watchedPosts: [],
   },
 };
@@ -32,10 +32,11 @@ const app = () => {
   const postsContainer = document.querySelector('div.posts');
 
   const watchedState = onChange(state, (path) => {
-    console.log(`PATH: ${path}`);
     const updatePosts = (timeout) => {
       setTimeout(() => {
         renderPostBlock(postsContainer, watchedState);
+        postBtnHandler(watchedState);
+        linkHandler(watchedState);
         updatePosts(5000);
       }, timeout);
     };
@@ -50,7 +51,6 @@ const app = () => {
         renderForm(form, state.formState);
         break;
       case 'formState.parsingError':
-        console.log('parsing error!!!!!!!');
         renderForm(form, state.formState);
         break;
       case 'feed':
@@ -59,11 +59,15 @@ const app = () => {
       case 'posts':
         renderPostBlock(postsContainer, watchedState);
         postBtnHandler(watchedState);
-        updatePosts(postsContainer, timeout);
+        linkHandler(watchedState);
+        updatePosts(timeout);
         break;
-      case 'modals.currentId':
+      case 'modals.clickedId':
+        renderPostBlock(postsContainer, watchedState);
         renderModal(modal, watchedState.modals, watchedState.posts);
-        btnWatched(postsContainer, watchedState.modals.currentId);
+        postBtnHandler(watchedState);
+        linkHandler(watchedState);
+        btnWatched(postsContainer, watchedState.modals.watchedPosts);
         break;
       default:
         break;
