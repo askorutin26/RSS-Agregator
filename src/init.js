@@ -1,4 +1,4 @@
+import app from './watcher.js';
 import 'bootstrap';
-import app from './index.js';
 
 app();
