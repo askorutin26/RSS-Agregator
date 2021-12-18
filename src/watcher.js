@@ -1,8 +1,10 @@
 import onChange from 'on-change';
 import {
-  renderForm, renderFeedBlock, renderPostBlock, renderModal, btnWatched,
+  renderForm, renderRss, renderModal,
 } from './view.js';
-import { formHandler, postBtnHandler, linkHandler } from './handler.js';
+import {
+  formHandler, postBtnHandler, clickedPostHandler,
+} from './handler.js';
 
 const state = {
   formState: {
@@ -10,15 +12,14 @@ const state = {
     previousURLS: [],
     state: '',
     valid: '',
+    validationResult: '',
     validationError: '',
     networkError: '',
     parsingError: '',
   },
-  feed: {
-    feedTitle: '',
-    feedDescription: '',
-  },
+  feeds: [],
   posts: [],
+  rss: [],
   modals: {
     clickedId: [],
     watchedPosts: [],
@@ -26,54 +27,39 @@ const state = {
 };
 
 const app = () => {
-  const form = document.querySelector('.rss-form');
-  const modal = document.querySelector('div.modal.fade');
-  const feedContainer = document.querySelector('div.feeds');
-  const postsContainer = document.querySelector('div.posts');
+  const formContainer = document.querySelector('.rss-form');
+  const modalContainer = document.querySelector('div.modal.fade');
+  const rssContainer = document.querySelector('.rss-container');
+  function update(container, appState, timeout) {
+    setTimeout(() => {
+      renderRss(container, appState);
+      update(container, appState, 5000);
+      postBtnHandler(appState);
+    }, timeout);
+  }
 
   const watchedState = onChange(state, (path) => {
-    const updatePosts = (timeout) => {
-      setTimeout(() => {
-        renderPostBlock(postsContainer, watchedState);
-        postBtnHandler(watchedState);
-        linkHandler(watchedState);
-        updatePosts(5000);
-      }, timeout);
-    };
-    const timeout = 5000;
     switch (path) {
-      case 'formState.valid':
+      case 'formState.validationResult':
       case 'formState.state':
-      case 'formState.validationError':
-        renderForm(form, state.formState);
+        renderForm(formContainer, state);
         break;
-      case 'formState.networkError':
-        renderForm(form, state.formState);
-        break;
-      case 'formState.parsingError':
-        renderForm(form, state.formState);
-        break;
-      case 'feed':
-        renderFeedBlock(feedContainer, watchedState.feed);
-        break;
-      case 'posts':
-        renderPostBlock(postsContainer, watchedState);
+      case 'rss':
+        renderRss(rssContainer, watchedState);
         postBtnHandler(watchedState);
-        linkHandler(watchedState);
-        updatePosts(timeout);
+        update(rssContainer, watchedState, 5000);
+
         break;
       case 'modals.clickedId':
-        renderPostBlock(postsContainer, watchedState);
-        renderModal(modal, watchedState.modals, watchedState.posts);
-        postBtnHandler(watchedState);
-        linkHandler(watchedState);
-        btnWatched(postsContainer, watchedState.modals.watchedPosts);
+        renderModal(modalContainer, watchedState);
+        clickedPostHandler(watchedState);
+
         break;
       default:
         break;
     }
   });
-  formHandler(watchedState, form);
+  formHandler(watchedState, formContainer);
 };
 
 export default app;
