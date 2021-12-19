@@ -1,4 +1,8 @@
 import app from './watcher.js';
 import 'bootstrap';
 
-app();
+const formContainer = document.querySelector('.rss-form');
+const modalContainer = document.querySelector('div.modal.fade');
+const rssContainer = document.querySelector('.rss-container');
+const elements = [formContainer, modalContainer, rssContainer];
+app(elements);
