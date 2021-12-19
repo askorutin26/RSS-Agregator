@@ -41,6 +41,7 @@ const loadPosts = (state) => {
 
 export const formHandler = (state, form) => {
   const watchedState = state;
+  console.log(state);
   console.log(form);
   if (form === null) {
     const newForm = document.querySelector('.rss-form');
