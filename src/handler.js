@@ -41,29 +41,6 @@ const loadPosts = (state) => {
 
 export const formHandler = (state, form) => {
   const watchedState = state;
-  console.log(state);
-  console.log(form);
-  if (form === null) {
-    const newForm = document.querySelector('.rss-form');
-    newForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const input = form.querySelector('input');
-      const { value } = input;
-      const normalizedURL = value.trim();
-      const urlArr = watchedState.formState.previousURLS;
-      watchedState.formState.currentURL = normalizedURL;
-      watchedState.formState.state = 'processing';
-
-      const validationResult = validateURL(normalizedURL, urlArr);
-      if (validationResult === 'valid') {
-        watchedState.formState.previousURLS.push(normalizedURL);
-        loadPosts(watchedState, form);
-      } else {
-        watchedState.formState.validationResult = validationResult;
-      }
-      watchedState.formState.state = 'finished';
-    });
-  }
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const input = form.querySelector('input');

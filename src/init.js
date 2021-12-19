@@ -5,4 +5,6 @@ const formContainer = document.querySelector('.rss-form');
 const modalContainer = document.querySelector('div.modal.fade');
 const rssContainer = document.querySelector('.rss-container');
 const elements = [formContainer, modalContainer, rssContainer];
+console.log('FORM IN INIT.JS');
+console.log(formContainer);
 app(elements);
