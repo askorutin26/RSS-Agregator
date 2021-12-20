@@ -29,7 +29,7 @@ export default {
       validation: {
         valid: 'RSS успешно загружен',
         invalidURL: 'Ссылка должна быть валидным URL',
-        alreadyExists: 'RSS уже добавлен',
+        alreadyExists: 'RSS уже существует',
         networkError: 'Ошибка сети',
         parsingError: 'Ресурс не содержит валидный RSS',
       },
