@@ -5,28 +5,28 @@ import {
 import {
   formHandler, postBtnHandler, clickedPostHandler,
 } from './handler.js';
-
-const state = {
-  formState: {
-    currentURL: '',
-    previousURLS: [],
-    state: '',
-    valid: '',
-    validationResult: '',
-    validationError: '',
-    networkError: '',
-    parsingError: '',
-  },
-  feeds: [],
-  posts: [],
-  rss: [],
-  modals: {
-    clickedId: [],
-    watchedPosts: [],
-  },
-};
+import 'bootstrap';
 
 const app = () => {
+  const state = {
+    formState: {
+      currentURL: '',
+      previousURLS: [],
+      state: '',
+      valid: '',
+      validationResult: '',
+      validationError: '',
+      networkError: '',
+      parsingError: '',
+    },
+    feeds: [],
+    posts: [],
+    rss: [],
+    modals: {
+      clickedId: [],
+      watchedPosts: [],
+    },
+  };
   const formContainer = document.querySelector('.rss-form');
   const modalContainer = document.querySelector('div.modal.fade');
   const rssContainer = document.querySelector('.rss-container');
