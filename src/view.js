@@ -25,7 +25,11 @@ const createInput = (state) => {
       break;
   }
   switch (state.formState.state) {
+    case 'processing':
+      input.setAttribute('readonly', true);
+      break;
     case 'finished':
+      input.removeAttribute('readonly');
       input.value = '';
       break;
     default:

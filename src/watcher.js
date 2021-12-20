@@ -14,12 +14,7 @@ const app = () => {
       state: '',
       valid: '',
       validationResult: '',
-      validationError: '',
-      networkError: '',
-      parsingError: '',
     },
-    feeds: [],
-    posts: [],
     rss: [],
     modals: {
       clickedId: [],
