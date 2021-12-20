@@ -12,10 +12,9 @@ const validateURL = (url, urlArr) => {
   try {
     schema.validateSync(normalizedURL);
   } catch (error) {
-    console.log(parseError(error.message));
     return parseError(error.message);
   }
-  console.log('valid');
+
   return 'valid';
 };
 export default validateURL;

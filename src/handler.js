@@ -33,6 +33,7 @@ const loadPosts = (state) => {
       watchedState.rss.unshift(rss);
       watchedState.formState.state = 'finished';
       watchedState.formState.validationResult = 'valid';
+      watchedState.formState.previousURLS.push(url);
     }
   }).catch(() => {
     watchedState.formState.validationResult = 'networkError';
@@ -52,7 +53,6 @@ export const formHandler = (state, form) => {
 
     const validationResult = validateURL(normalizedURL, urlArr);
     if (validationResult === 'valid') {
-      watchedState.formState.previousURLS.push(normalizedURL);
       loadPosts(watchedState, form);
     } else {
       watchedState.formState.validationResult = validationResult;
