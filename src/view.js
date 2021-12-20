@@ -4,6 +4,7 @@ import './i18n';
 
 const createInput = (state) => {
   const input = document.createElement('input');
+  input.setAttribute('type', 'text');
   input.setAttribute('id', 'url-input');
   input.setAttribute('name', 'url');
   input.setAttribute('required', true);
