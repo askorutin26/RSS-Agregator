@@ -103,6 +103,7 @@ export const renderForm = (form, state) => {
   const label = createLabel();
   const example = createExampleBlock();
   const result = createResultBlock(state);
+  console.log(result);
   const divRow = document.createElement('div');
   divRow.classList.add('row');
 
