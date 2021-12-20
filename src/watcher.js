@@ -26,8 +26,11 @@ const state = {
   },
 };
 
-const app = (elements) => {
-  const [formContainer, modalContainer, rssContainer] = elements;
+const app = () => {
+  const formContainer = document.querySelector('.rss-form');
+  const modalContainer = document.querySelector('div.modal.fade');
+  const rssContainer = document.querySelector('.rss-container');
+
   function update(container, appState, timeout) {
     setTimeout(() => {
       renderRss(container, appState);
