@@ -29,7 +29,6 @@ const createInput = (state) => {
       input.setAttribute('readonly', true);
       break;
     case 'finished':
-      input.removeAttribute('readonly');
       input.value = '';
       break;
     default:
@@ -103,6 +102,7 @@ const createExampleBlock = () => {
 
 export const renderForm = (form, state) => {
   const input = createInput(state);
+  console.log(input);
   const addBtn = createAddBtn(state);
   const label = createLabel();
   const example = createExampleBlock();
