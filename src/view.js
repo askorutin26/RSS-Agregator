@@ -69,10 +69,10 @@ const createAddBtn = (state) => {
   const button = document.createElement('button');
   switch (state.formState.state) {
     case 'processing':
-      button.setAttribute('aria-disabled', true);
+      button.setAttribute('disabled', true);
       break;
     case 'finished':
-      button.setAttribute('aria-disabled', false);
+      button.removeAttribute('disabled');
       break;
     default:
       throw new Error(`Cannot create add button. Unexpected state: ${state.formState.state}`);
