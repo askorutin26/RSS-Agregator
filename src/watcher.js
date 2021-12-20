@@ -5,7 +5,6 @@ import {
 import {
   formHandler, postBtnHandler, clickedPostHandler,
 } from './handler.js';
-import 'bootstrap';
 
 const app = () => {
   const state = {
