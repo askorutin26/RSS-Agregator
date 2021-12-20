@@ -1,5 +1,12 @@
 import axios from 'axios';
 
-const makeQueryForRss = (url) => axios.get(url);
+const wrapProxy = (url) => {
+  const urlBuilder = new URL('/get', 'https://hexlet-allorigins.herokuapp.com');
+  urlBuilder.searchParams.set('url', url);
+  urlBuilder.searchParams.set('disableCache', 'true');
+  return urlBuilder.toString();
+};
+
+const makeQueryForRss = (url) => axios.get(wrapProxy(url));
 
 export default makeQueryForRss;

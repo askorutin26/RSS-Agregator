@@ -7,7 +7,7 @@ const loadPosts = (state) => {
   const watchedState = state;
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
-    const rssData = parseRSS(response.data);
+    const rssData = parseRSS(response.data.contents);
     if (rssData === 'parsererror') { watchedState.formState.validationResult = 'parsingError'; } else {
       const feedTitle = rssData.title;
       const feedDescription = rssData.description;
