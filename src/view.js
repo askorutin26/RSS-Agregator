@@ -35,9 +35,9 @@ const createInput = (state) => {
     default:
       break;
   }
-console.log(`READONLY:${input.getAttribute('readonly')}`);
-console.log(input);
-console.log(state.formState);
+  console.log(state.formState);
+  console.log(`READONLY:${input.getAttribute('readonly')}`);
+  console.log(input);
   return input;
 };
 

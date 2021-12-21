@@ -34,6 +34,7 @@ const loadPosts = (state) => {
       watchedState.formState.state = 'finished';
       watchedState.formState.validationResult = 'valid';
       watchedState.formState.previousURLS.push(url);
+      watchedState.formState.state = 'finished';
     }
   }).catch(() => {
     watchedState.formState.validationResult = 'networkError';
@@ -56,8 +57,8 @@ export const formHandler = (state, form) => {
       loadPosts(watchedState, form);
     } else {
       watchedState.formState.validationResult = validationResult;
+      watchedState.formState.state = 'finished';
     }
-    watchedState.formState.state = 'finished';
   });
 };
 
