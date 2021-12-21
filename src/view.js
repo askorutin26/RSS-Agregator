@@ -35,9 +35,6 @@ const createInput = (state) => {
     default:
       break;
   }
-  console.log(state.formState);
-  console.log(`READONLY:${input.getAttribute('readonly')}`);
-  console.log(input);
   return input;
 };
 
@@ -81,7 +78,7 @@ const createAddBtn = (state) => {
       button.removeAttribute('disabled');
       break;
     default:
-      throw new Error(`Cannot create add button. Unexpected state: ${state.formState.state}`);
+      break;
   }
   button.setAttribute('type', 'submit');
   button.setAttribute('aria-label', 'add');

@@ -34,7 +34,6 @@ const app = () => {
   }
 
   const watchedState = onChange(state, (path) => {
-    console.log(`PATH: ${path}`);
     switch (path) {
       case 'formState.state':
         renderForm(formContainer, state);
@@ -43,12 +42,10 @@ const app = () => {
         renderRss(rssContainer, watchedState);
         postBtnHandler(watchedState);
         update(rssContainer, watchedState, 5000);
-
         break;
       case 'modals.clickedId':
         renderModal(modalContainer, watchedState);
         clickedPostHandler(watchedState);
-
         break;
       default:
         break;

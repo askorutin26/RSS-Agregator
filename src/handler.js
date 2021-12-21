@@ -8,7 +8,6 @@ const loadPosts = (state) => {
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data.contents);
-    console.log(`RSSDATA: ${rssData}`);
     if (rssData === 'parsererror') {
       watchedState.formState.validationResult = 'parsingError';
       watchedState.formState.state = 'finished';
@@ -39,8 +38,7 @@ const loadPosts = (state) => {
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
     }
-  }).catch((error) => {
-    console.log(`ERROR: ${error}`);
+  }).catch(() => {
     watchedState.formState.validationResult = 'networkError';
     watchedState.formState.state = 'finished';
   });
@@ -58,9 +56,7 @@ export const formHandler = (state, form) => {
     watchedState.formState.state = 'processing';
 
     const validationResult = validateURL(normalizedURL, urlArr);
-    console.log(`VALIDATION RESULT: ${validationResult}`);
     if (validationResult === 'valid') {
-      console.log('WORKS');
       loadPosts(watchedState, form);
     } else {
       watchedState.formState.validationResult = validationResult;
