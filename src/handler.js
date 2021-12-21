@@ -31,7 +31,6 @@ const loadPosts = (state) => {
       };
 
       watchedState.rss.unshift(rss);
-      watchedState.formState.state = 'finished';
       watchedState.formState.validationResult = 'valid';
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
