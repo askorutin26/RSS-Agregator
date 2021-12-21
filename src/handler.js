@@ -8,7 +8,11 @@ const loadPosts = (state) => {
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data.contents);
-    if (rssData === 'parsererror') { watchedState.formState.validationResult = 'parsingError'; } else {
+    console.log(`RSSDATA: ${rssData}`);
+    if (rssData === 'parsererror') {
+      watchedState.formState.validationResult = 'parsingError';
+      watchedState.formState.state = 'finished';
+    } else {
       const feedTitle = rssData.title;
       const feedDescription = rssData.description;
       const feedPosts = rssData.postElems;
@@ -35,7 +39,9 @@ const loadPosts = (state) => {
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
     }
-  }).catch(() => {
+  }).catch((error) => {
+    console.log(`ERROR: ${error}`);
+    watchedState.formState.state = 'finished';
     watchedState.formState.validationResult = 'networkError';
   });
 };
@@ -52,7 +58,9 @@ export const formHandler = (state, form) => {
     watchedState.formState.state = 'processing';
 
     const validationResult = validateURL(normalizedURL, urlArr);
+    console.log(`VALIDATION RESULT: ${validationResult}`);
     if (validationResult === 'valid') {
+      console.log('WORKS');
       loadPosts(watchedState, form);
     } else {
       watchedState.formState.validationResult = validationResult;
