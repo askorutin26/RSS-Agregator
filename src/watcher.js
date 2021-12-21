@@ -35,7 +35,6 @@ const app = () => {
 
   const watchedState = onChange(state, (path) => {
     switch (path) {
-      case 'formState.validationResult':
       case 'formState.state':
         renderForm(formContainer, state);
         break;
