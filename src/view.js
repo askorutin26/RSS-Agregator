@@ -35,7 +35,9 @@ const createInput = (state) => {
     default:
       break;
   }
-
+console.log(`READONLY:${input.getAttribute('readonly')}`);
+console.log(input);
+console.log(state.formState);
   return input;
 };
 
@@ -103,7 +105,6 @@ const createExampleBlock = () => {
 
 export const renderForm = (form, state) => {
   const input = createInput(state);
-  console.log(input.getAttribute('readonly'));
   const addBtn = createAddBtn(state);
   const label = createLabel();
   const example = createExampleBlock();
