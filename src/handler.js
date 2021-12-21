@@ -41,8 +41,8 @@ const loadPosts = (state) => {
     }
   }).catch((error) => {
     console.log(`ERROR: ${error}`);
-    watchedState.formState.state = 'finished';
     watchedState.formState.validationResult = 'networkError';
+    watchedState.formState.state = 'finished';
   });
 };
 
