@@ -7,11 +7,8 @@ const loadPosts = (state) => {
   const watchedState = state;
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
-    const rssData = parseRSS(response.data.contents);
-    if (rssData === 'parsererror') {
-      watchedState.formState.validationResult = 'parsingError';
-      watchedState.formState.state = 'finished';
-    } else {
+    try {
+      const rssData = parseRSS(response.data.contents);
       const feedTitle = rssData.title;
       const feedDescription = rssData.description;
       const feedPosts = rssData.postElems;
@@ -20,22 +17,22 @@ const loadPosts = (state) => {
         feedDescription,
         url,
       };
-
       const posts = feedPosts.map((post) => {
         const id = _.uniqueId('post_');
         return { id, post };
       });
-
       const rss = {
         rssId: _.uniqueId('rss_'),
         url,
         feed,
         posts,
       };
-
       watchedState.rss.unshift(rss);
       watchedState.formState.validationResult = 'valid';
       watchedState.formState.previousURLS.push(url);
+      watchedState.formState.state = 'finished';
+    } catch (error) {
+      watchedState.formState.validationResult = 'parsingError';
       watchedState.formState.state = 'finished';
     }
   }).catch(() => {
