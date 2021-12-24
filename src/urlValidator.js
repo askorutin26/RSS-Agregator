@@ -11,11 +11,6 @@ const validateURL = (url, urlArr) => {
     },
   });
   const schema = yup.string().url().required().notOneOf(urlArr);
-  try {
-    schema.validateSync(url);
-  } catch (error) {
-    return error.errors[0];
-  }
-  return 'valid';
+  return schema.validate(url);
 };
 export default validateURL;

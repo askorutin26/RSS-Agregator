@@ -4,6 +4,7 @@ import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
 
 const loadPosts = (state) => {
+  console.log('LOAD POSTS FN ACTIVATED!!!!!');
   const watchedState = state;
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
@@ -52,13 +53,14 @@ export const formHandler = (state, form) => {
     watchedState.formState.currentURL = normalizedURL;
     watchedState.formState.state = 'processing';
 
-    const validationResult = validateURL(normalizedURL, urlArr);
-    if (validationResult === 'valid') {
+    validateURL(normalizedURL, urlArr).then(() => {
+      watchedState.formState.validationResult = 'valid';
       loadPosts(watchedState, form);
-    } else {
-      watchedState.formState.validationResult = validationResult;
+    }).catch((error) => {
+      console.log(error.message);
+      watchedState.formState.validationResult = error.message;
       watchedState.formState.state = 'finished';
-    }
+    });
   });
 };
 

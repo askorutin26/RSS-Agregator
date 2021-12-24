@@ -34,6 +34,7 @@ const app = () => {
   }
 
   const watchedState = onChange(state, (path) => {
+    console.log(path);
     switch (path) {
       case 'formState.state':
         renderForm(formContainer, state);
