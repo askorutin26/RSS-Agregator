@@ -3,7 +3,7 @@ import {
   renderForm, renderRss, renderModal,
 } from './view.js';
 import {
-  formHandler, postBtnHandler, clickedPostHandler,
+  formHandler, postBtnHandler, clickedPostHandler, postHandler,
 } from './handler.js';
 
 const app = () => {
@@ -12,8 +12,7 @@ const app = () => {
       currentURL: '',
       previousURLS: [],
       state: '',
-      valid: '',
-      validationResult: '',
+      error: [],
     },
     rss: [],
     modals: {
@@ -24,6 +23,7 @@ const app = () => {
   const formContainer = document.querySelector('.rss-form');
   const modalContainer = document.querySelector('div.modal.fade');
   const rssContainer = document.querySelector('.rss-container');
+  const postsContainer = document.querySelector('div.post');
 
   function update(container, appState, timeout) {
     setTimeout(() => {
@@ -35,6 +35,7 @@ const app = () => {
 
   const watchedState = onChange(state, (path) => {
     console.log(path);
+    console.log(state.formState);
     switch (path) {
       case 'formState.state':
         renderForm(formContainer, state);

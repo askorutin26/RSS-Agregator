@@ -16,7 +16,7 @@ const createInput = (state) => {
   input.classList.add('form-control', 'w-100');
   input.value = state.formState.currentURL;
 
-  switch (state.formState.validationResult) {
+  switch (state.formState.error) {
     case 'invalidUrl':
     case 'networkError':
     case 'parsingError':
@@ -26,7 +26,7 @@ const createInput = (state) => {
       break;
   }
   switch (state.formState.state) {
-    case 'processing':
+    case 'loading':
       input.setAttribute('readonly', true);
       break;
     case 'finished':
@@ -41,18 +41,23 @@ const createInput = (state) => {
 const createResultBlock = (state) => {
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
-  p.textContent = i18next.t(`validation.${state.formState.validationResult}`);
-  if (state.formState.validationResult === 'valid') {
-    p.classList.add('text-success');
-  } else { p.classList.add('text-danger'); }
 
+  if (state.formState.error.length !== 0) {
+    p.textContent = i18next.t(`validation.${state.formState.error}`);
+    p.classList.add('text-danger');
+  } else {
+    p.textContent = i18next.t(`validation.${state.formState.state}`);
+    p.classList.add('text-success');
+  }
+console.log('=================p================')
+console.log(p);
   return p;
 };
 
 const createAddBtn = (state) => {
   const button = document.createElement('button');
   switch (state.formState.state) {
-    case 'processing':
+    case 'loading':
       button.setAttribute('disabled', true);
       break;
     case 'finished':
@@ -140,6 +145,7 @@ const createPostBlock = (state, rss) => {
     a.setAttribute('rel', 'noopener', 'noreferrer');
     a.setAttribute('id', id);
     a.setAttribute('rss-id', rssId);
+    a.setAttribute('data-id', id);
     if (state.modals.watchedPosts.includes(id)) {
       a.classList.add('fw-normal');
     } else { a.classList.add('fw-bold'); }
@@ -224,8 +230,6 @@ export const renderModal = (container, state) => {
   const { rss } = state;
   const currentRss = rss.find(({ rssId }) => rssId === currentRssId);
   const currentPost = currentRss.posts.find(({ id }) => id === currentBtnId);
-  console.log(currentPost);
-  console.log(state.modals);
   const { title, link, description } = currentPost.post;
   const header = container.querySelector('.modal-header');
   const headerTitle = header.querySelector('.modal-title');

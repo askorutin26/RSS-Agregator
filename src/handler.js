@@ -5,6 +5,7 @@ import parseRSS from './rssParser';
 
 const loadPosts = (state) => {
   const watchedState = state;
+  watchedState.formState.state = 'loading';
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     try {
@@ -28,16 +29,15 @@ const loadPosts = (state) => {
         posts,
       };
       watchedState.rss.unshift(rss);
-      watchedState.formState.validationResult = 'valid';
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
     } catch (error) {
-      watchedState.formState.validationResult = 'parsingError';
-      watchedState.formState.state = 'finished';
+      watchedState.formState.error = 'parsingError';
+      watchedState.formState.state = 'error';
     }
   }).catch(() => {
-    watchedState.formState.validationResult = 'networkError';
-    watchedState.formState.state = 'finished';
+    watchedState.formState.error = 'networkError';
+    watchedState.formState.state = 'error';
   });
 };
 
@@ -50,18 +50,23 @@ export const formHandler = (state, form) => {
     const normalizedURL = value.trim();
     const urlArr = watchedState.formState.previousURLS;
     watchedState.formState.currentURL = normalizedURL;
-    watchedState.formState.state = 'processing';
-
+    watchedState.formState.state = 'filling';
+    watchedState.formState.error = '';
     validateURL(normalizedURL, urlArr).then(() => {
-      watchedState.formState.validationResult = 'valid';
       loadPosts(watchedState, form);
     }).catch((error) => {
-      watchedState.formState.validationResult = error.message;
-      watchedState.formState.state = 'finished';
+      watchedState.formState.error = error.message;
+      watchedState.formState.state = 'error';
     });
   });
 };
-
+export const postHandler = (container) => {
+  container.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('clicked');
+    console.log(`e target:${e.target}`);
+  });
+};
 export const postBtnHandler = (state) => {
   const watchedState = state;
   const { modals } = watchedState;
