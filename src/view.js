@@ -49,8 +49,7 @@ const createResultBlock = (state) => {
     p.textContent = i18next.t(`validation.${state.formState.state}`);
     p.classList.add('text-success');
   }
-console.log('=================p================')
-console.log(p);
+
   return p;
 };
 
@@ -229,6 +228,7 @@ export const renderModal = (container, state) => {
   const { currentBtnId, currentRssId } = clickedId;
   const { rss } = state;
   const currentRss = rss.find(({ rssId }) => rssId === currentRssId);
+  console.log(`currentRSS: ${currentRss}`);
   const currentPost = currentRss.posts.find(({ id }) => id === currentBtnId);
   const { title, link, description } = currentPost.post;
   const header = container.querySelector('.modal-header');
