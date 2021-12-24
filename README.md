@@ -1,5 +1,5 @@
-#### RSS-Agregator allows you to read all the latest posts or news.
-#### Just insert a link and see recently added articles.
+# About 
+RSS-Agregator allows you to read all the latest posts or news that were recently added to a website. Just insert a link to .rss or .xml file and easily look though new articles.
 
 ### Link:
 #### [RSS AGREGATOR](https://frontend-project-lvl3-beryl.vercel.app/)
