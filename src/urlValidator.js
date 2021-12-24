@@ -1,20 +1,21 @@
 import * as yup from 'yup';
-
-const parseError = (errorMessage) => {
-  if (errorMessage === 'this must be a valid URL') {
-    return 'invalidURL';
-  } return 'alreadyExists';
-};
+import { setLocale } from 'yup';
 
 const validateURL = (url, urlArr) => {
+  setLocale({
+    mixed: {
+      notOneOf: 'alreadyExists',
+    },
+    string: {
+      url: 'invalidURL',
+    },
+  });
   const schema = yup.string().url().required().notOneOf(urlArr);
-  const normalizedURL = url.trim();
   try {
-    schema.validateSync(normalizedURL);
+    schema.validateSync(url);
   } catch (error) {
-    return parseError(error.message);
+    return error.errors[0];
   }
-
   return 'valid';
 };
 export default validateURL;
