@@ -1,6 +1,8 @@
-RSS-Agregator allows you to read all the latest posts or news. Just insert a link and see recently added articles.
+#### RSS-Agregator allows you to read all the latest posts or news.
+#### Just insert a link and see recently added articles.
+
 ### Link:
-#### [RSS Agregator](https://frontend-project-lvl3-beryl.vercel.app/)
+#### [RSS AGREGATOR](https://frontend-project-lvl3-beryl.vercel.app/)
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/askorutin26/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/askorutin26/frontend-project-lvl3/actions)
