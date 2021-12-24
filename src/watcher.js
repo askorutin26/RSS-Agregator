@@ -12,11 +12,11 @@ const app = () => {
       currentURL: '',
       previousURLS: [],
       state: '',
-      error: [],
+      error: '',
     },
     rss: [],
     modals: {
-      clickedId: [],
+      clickedId: '',
       watchedPosts: [],
     },
   };
