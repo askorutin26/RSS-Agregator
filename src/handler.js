@@ -4,7 +4,6 @@ import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
 
 const loadPosts = (state) => {
-  console.log('LOAD POSTS FN ACTIVATED!!!!!');
   const watchedState = state;
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
@@ -57,7 +56,6 @@ export const formHandler = (state, form) => {
       watchedState.formState.validationResult = 'valid';
       loadPosts(watchedState, form);
     }).catch((error) => {
-      console.log(error.message);
       watchedState.formState.validationResult = error.message;
       watchedState.formState.state = 'finished';
     });
@@ -99,22 +97,6 @@ export const postBtnHandler = (state) => {
         modals.watchedPosts.push(currentBtnId);
       }
       modals.clickedId = clickedBtn;
-    });
-  });
-};
-
-export const linkHandler = (state) => {
-  const watchedState = state;
-  const { modals } = watchedState;
-
-  const links = document.querySelectorAll('a');
-  links.forEach((link) => {
-    link.addEventListener('click', (e) => {
-      const id = e.target.getAttribute('id');
-      if (!modals.watchedPosts.includes(id)) {
-        modals.watchedPosts.push(id);
-      }
-      modals.clickedId = id;
     });
   });
 };
