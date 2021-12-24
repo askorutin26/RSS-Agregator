@@ -2,7 +2,6 @@ const parseRSS = (xml) => {
   const domParser = new DOMParser();
   const doc = domParser.parseFromString(xml, 'application/xml');
   const error = doc.querySelector('parsererror');
-  console.log(error);
   if (error !== null) { throw new Error('An error occured during parsing'); }
   const titleElem = doc.querySelector('title');
   const title = titleElem.textContent;
