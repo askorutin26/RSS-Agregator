@@ -41,30 +41,11 @@ const createInput = (state) => {
 const createResultBlock = (state) => {
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
-  switch (state.formState.validationResult) {
-    case 'invalidURL':
-      p.textContent = i18next.t('validation.invalidURL');
-      p.classList.add('text-danger');
-      break;
-    case 'alreadyExists':
-      p.textContent = i18next.t('validation.alreadyExists');
-      p.classList.add('text-danger');
-      break;
-    case 'networkError':
-      p.textContent = i18next.t('validation.networkError');
-      p.classList.add('text-danger');
-      break;
-    case 'parsingError':
-      p.textContent = i18next.t('validation.parsingError');
-      p.classList.add('text-danger');
-      break;
-    case 'valid':
-      p.textContent = i18next.t('validation.valid');
-      p.classList.add('text-success');
-      break;
-    default:
-      break;
-  }
+  p.textContent = i18next.t(`validation.${state.formState.validationResult}`);
+  if (state.formState.validationResult === 'valid') {
+    p.classList.add('text-success');
+  } else { p.classList.add('text-danger'); }
+
   return p;
 };
 
@@ -241,17 +222,11 @@ export const renderModal = (container, state) => {
   const { clickedId } = state.modals;
   const { currentBtnId, currentRssId } = clickedId;
   const { rss } = state;
-  const currentRss = rss.filter((elem) => {
-    const { rssId } = elem;
-    return rssId === currentRssId;
-  });
-  const { posts } = currentRss[0];
-  const currentPost = posts.filter((post) => {
-    const { id } = post;
-    return id === currentBtnId;
-  });
-
-  const { title, link, description } = currentPost[0].post;
+  const currentRss = rss.find(({ rssId }) => rssId === currentRssId);
+  const currentPost = currentRss.posts.find(({ id }) => id === currentBtnId);
+  console.log(currentPost);
+  console.log(state.modals);
+  const { title, link, description } = currentPost.post;
   const header = container.querySelector('.modal-header');
   const headerTitle = header.querySelector('.modal-title');
   headerTitle.textContent = title;
