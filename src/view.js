@@ -15,14 +15,8 @@ const createInput = (state) => {
   input.classList.add('form-control', 'w-100');
   input.value = state.formState.currentURL;
 
-  switch (state.formState.error) {
-    case 'invalidUrl':
-    case 'networkError':
-    case 'parsingError':
-      input.classList.add('is-invalid');
-      break;
-    default:
-      break;
+  if (state.formState.state === 'error') {
+    input.classList.add('is-invalid');
   }
   switch (state.formState.state) {
     case 'loading':
@@ -41,7 +35,7 @@ const createResultBlock = (state) => {
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
 
-  if (state.formState.error.length !== 0) {
+  if (state.formState.state === 'error') {
     p.textContent = i18next.t(`validation.${state.formState.error}`);
     p.classList.add('text-danger');
   } else {
@@ -227,7 +221,6 @@ export const renderModal = (container, state) => {
   const { currentBtnId, currentRssId } = clickedId;
   const { rss } = state;
   const currentRss = rss.find(({ rssId }) => rssId === currentRssId);
-  console.log(`currentRSS: ${currentRss}`);
   const currentPost = currentRss.posts.find(({ id }) => id === currentBtnId);
   const { title, link, description } = currentPost.post;
   const header = container.querySelector('.modal-header');
