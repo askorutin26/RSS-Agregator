@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import i18next from 'i18next';
-import './i18n';
 
 const createInput = (state) => {
   const input = document.createElement('input');
