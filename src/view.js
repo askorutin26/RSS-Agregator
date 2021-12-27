@@ -218,7 +218,6 @@ export const renderRss = (container, state) => {
 };
 
 export const renderModal = (container, state) => {
-  console.log('MODAL RENDERED!!!!!!');
   const { clickedId } = state.modals;
   const { rss } = state;
 
