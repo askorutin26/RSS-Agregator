@@ -60,51 +60,6 @@ export const formHandler = (state, form) => {
     });
   });
 };
-export const postHandler = (container) => {
-  container.addEventListener('click', (e) => {
-    e.preventDefault();
-    console.log('clicked');
-    console.log(`e target:${e.target}`);
-  });
-};
-export const postBtnHandler = (state) => {
-  const watchedState = state;
-  const { modals } = watchedState;
-  const buttons = document.querySelectorAll('button[data-bs-toggle="modal"]');
-  const links = document.querySelectorAll('a');
-  links.forEach((link) => {
-    link.addEventListener('click', (e) => {
-      const currentBtnId = e.target.getAttribute('id');
-      const currentRssId = e.target.getAttribute('rss-id');
-      const clickedBtn = {
-        currentBtnId,
-        currentRssId,
-      };
-
-      if (!modals.watchedPosts.includes(currentBtnId)) {
-        modals.watchedPosts.push(currentBtnId);
-      }
-      modals.clickedId = clickedBtn;
-    });
-  });
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      const currentBtnId = e.target.getAttribute('id');
-      const currentRssId = e.target.getAttribute('rss-id');
-      const clickedBtn = {
-        currentBtnId,
-        currentRssId,
-      };
-
-      if (!modals.watchedPosts.includes(currentBtnId)) {
-        modals.watchedPosts.push(currentBtnId);
-      }
-      modals.clickedId = clickedBtn;
-    });
-  });
-};
 
 export const clickedPostHandler = (state) => {
   const clickedIds = state.modals.watchedPosts;
@@ -118,5 +73,20 @@ export const clickedPostHandler = (state) => {
       link.classList.add('fw-bold');
       link.classList.remove('fw-normal');
     }
+  });
+};
+
+export const postHandler = (state, container) => {
+  const watchedState = state;
+  const { modals } = watchedState;
+  container.addEventListener('click', (e) => {
+    const postId = e.target.dataset.id;
+    if (postId !== 'undefined' && !modals.watchedPosts.includes(postId)) {
+      modals.watchedPosts.push(postId);
+      const link = document.querySelector(`a[data-id="${postId}"]`);
+      link.classList.add('fw-normal');
+      link.classList.remove('fw-bold');
+    }
+    modals.clickedId = postId;
   });
 };

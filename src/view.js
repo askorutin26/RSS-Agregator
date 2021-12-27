@@ -146,6 +146,7 @@ const createPostBlock = (state, rss) => {
     button.setAttribute('type', 'button');
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
+    button.setAttribute('data-id', id);
     button.setAttribute('id', id);
     button.setAttribute('rss-id', rssId);
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
@@ -217,12 +218,14 @@ export const renderRss = (container, state) => {
 };
 
 export const renderModal = (container, state) => {
+  console.log('MODAL RENDERED!!!!!!');
   const { clickedId } = state.modals;
-  const { currentBtnId, currentRssId } = clickedId;
   const { rss } = state;
-  const currentRss = rss.find(({ rssId }) => rssId === currentRssId);
-  const currentPost = currentRss.posts.find(({ id }) => id === currentBtnId);
-  const { title, link, description } = currentPost.post;
+
+  const currentRss = rss.find(({ posts }) => posts.find(({ id }) => id === clickedId));
+  const currentPost = currentRss.posts.find(({ id }) => id === clickedId).post;
+
+  const { title, link, description } = currentPost;
   const header = container.querySelector('.modal-header');
   const headerTitle = header.querySelector('.modal-title');
   headerTitle.textContent = title;
