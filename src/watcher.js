@@ -1,6 +1,7 @@
 import onChange from 'on-change';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { setLocale } from 'yup';
 import {
   renderForm, renderRss, renderModal,
 } from './view.js';
@@ -36,6 +37,15 @@ const app = () => {
     },
 
   }).then(() => {
+    setLocale({
+      mixed: {
+        notOneOf: 'alreadyExists',
+      },
+      string: {
+        url: 'invalidURL',
+      },
+    });
+
     const formContainer = document.querySelector('.rss-form');
     const modalContainer = document.querySelector('div.modal.fade');
     const rssContainer = document.querySelector('.rss-container');
