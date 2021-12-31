@@ -4,6 +4,7 @@ import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
 
 const loadPosts = (state) => {
+  console.log(state);
   const watchedState = state;
   watchedState.formState.state = 'loading';
   const url = watchedState.formState.currentURL;
@@ -14,24 +15,26 @@ const loadPosts = (state) => {
       const feedDescription = rssData.description;
       const feedPosts = rssData.postElems;
       const feed = {
+        feedID: _.uniqueId('feed_'),
         feedTitle,
         feedDescription,
         url,
       };
-      const posts = feedPosts.map((post) => {
+      const articles = feedPosts.map((post) => {
         const id = _.uniqueId('post_');
         return { id, post };
       });
       const rss = {
-        rssId: _.uniqueId('rss_'),
+        feedID: feed.feedID,
         url,
-        feed,
-        posts,
+        articles,
       };
-      watchedState.rss.unshift(rss);
+      watchedState.feeds.unshift(feed);
+      watchedState.posts.unshift(rss);
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
     } catch (error) {
+      console.log(error.message);
       watchedState.formState.error = 'parsingError';
       watchedState.formState.state = 'error';
     }
