@@ -110,7 +110,10 @@ export const renderForm = (form, state) => {
   form.append(result);
 };
 
-const createPostBlock = (state, rss) => {
+export const renderPostBlock = (state) => {
+  const postContainer = document.createElement('div');
+  postContainer.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'post');
+
   const divContainer = document.createElement('div');
   divContainer.classList.add('card', 'border-0');
 
@@ -124,10 +127,16 @@ const createPostBlock = (state, rss) => {
 
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
-  const liContainer = document.createDocumentFragment();
-  const { posts, rssId } = rss;
 
-  const liCollection = posts.map((elem) => {
+  const { currentURL } = state.formState;
+  const { posts } = state;
+
+  const rss = posts.find(({ url }) => url === currentURL);
+  const { feedID, articles } = rss;
+  console.log('RSS');
+  console.log(rss);
+
+  const liCollection = articles.map((elem) => {
     const { id, post } = elem;
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -136,7 +145,7 @@ const createPostBlock = (state, rss) => {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener', 'noreferrer');
     a.setAttribute('id', id);
-    a.setAttribute('rss-id', rssId);
+    a.setAttribute('feed-id', feedID);
     a.setAttribute('data-id', id);
     if (state.modals.watchedPosts.includes(id)) {
       a.classList.add('fw-normal');
@@ -148,81 +157,73 @@ const createPostBlock = (state, rss) => {
     button.setAttribute('data-bs-target', '#modal');
     button.setAttribute('data-id', id);
     button.setAttribute('id', id);
-    button.setAttribute('rss-id', rssId);
+    button.setAttribute('feed-id', feedID);
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.textContent = i18next.t('postBtn');
     li.append(a);
     li.append(button);
     return li;
   });
-  liContainer.append(...liCollection);
-  ul.append(liContainer);
+  ul.append(...liCollection);
   divContainer.append(ul);
-
-  return divContainer;
+  postContainer.append(divContainer);
+  const rssContainer = document.querySelector(`div.${feedID}`);
+  rssContainer.prepend(postContainer);
 };
 
-export const renderRss = (container, state) => {
-  const docFragment = document.createDocumentFragment();
-  const createRss = (rss) => {
-    const { rssId, feed } = rss;
-    const { feedTitle, feedDescription } = feed;
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('row', rssId);
-    const feedContainer = document.createElement('div');
-    feedContainer.classList.add('col-md-10', 'col-lg-2', 'mx-auto', 'feed');
-    const postContainer = document.createElement('div');
-    postContainer.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'post');
-    const divCard = document.createElement('div');
-    divCard.classList.add('card-border-0');
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-    const cardTitle = document.createElement('h2');
-    cardTitle.classList.add('cad-title', 'h4');
-    cardTitle.textContent = i18next.t('feeds');
-    cardBody.append(cardTitle);
+export const renderFeed = (container, state) => {
+  const { currentURL } = state.formState;
+  const feed = state.feeds.find(({ url }) => url === currentURL);
+  const { feedTitle, feedDescription, feedID } = feed;
 
-    const ul = document.createElement('ul');
-    ul.classList.add('list-group', 'border-0', 'rounded-0');
+  const rowDiv = document.createElement('div');
+  rowDiv.classList.add('row', feedID);
 
-    const li = document.createElement('li');
-    li.classList.add('list-group-item', 'border-0', 'border-end-0');
-    const h3 = document.createElement('h3');
+  const feedContainer = document.createElement('div');
+  feedContainer.classList.add('col-md-10', 'col-lg-2', 'mx-auto', 'feed');
 
-    h3.classList.add('h5', 'm-0');
-    h3.textContent = feedTitle;
+  const divCard = document.createElement('div');
+  divCard.classList.add('card-border-0');
 
-    const p = document.createElement('p');
-    p.classList.add('m-0', 'small', 'text-black-50');
-    p.textContent = feedDescription;
-    li.append(h3);
-    li.append(p);
-    ul.append(li);
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
 
-    divCard.append(cardBody);
-    divCard.append(ul);
-    const postsBlock = createPostBlock(state, rss);
-    feedContainer.append(divCard);
-    postContainer.append(postsBlock);
-    rowDiv.append(feedContainer);
-    rowDiv.append(postContainer);
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('cad-title', 'h4');
+  cardTitle.textContent = i18next.t('feeds');
+  cardBody.append(cardTitle);
 
-    docFragment.append(rowDiv);
-  };
-  const { rss } = state;
-  rss.forEach((rssElem) => {
-    createRss(rssElem);
-  });
-  container.textContent = '';
-  container.prepend(docFragment);
+  const ul = document.createElement('ul');
+  ul.classList.add('list-group', 'border-0', 'rounded-0');
+
+  const li = document.createElement('li');
+  li.classList.add('list-group-item', 'border-0', 'border-end-0');
+  const h3 = document.createElement('h3');
+
+  h3.classList.add('h5', 'm-0');
+  h3.textContent = feedTitle;
+
+  const p = document.createElement('p');
+  p.classList.add('m-0', 'small', 'text-black-50');
+  p.textContent = feedDescription;
+  li.append(h3);
+  li.append(p);
+  ul.append(li);
+
+  divCard.append(cardBody);
+  divCard.append(ul);
+  feedContainer.append(divCard);
+  rowDiv.prepend(feedContainer);
+
+  container.prepend(rowDiv);
 };
 
 export const renderModal = (container, state) => {
   const { clickedId } = state.modals;
-  const { rss } = state;
+  const { posts } = state;
 
-  const currentRss = rss.find(({ posts }) => posts.find(({ id }) => id === clickedId));
-  const currentPost = currentRss.posts.find(({ id }) => id === clickedId).post;
+  const currentRss = posts.find(({ articles }) => articles.find(({ id }) => id === clickedId));
+  const currentPost = currentRss.articles.find(({ id }) => id === clickedId).post;
 
   const { title, link, description } = currentPost;
   const header = container.querySelector('.modal-header');
