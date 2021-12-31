@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { setLocale } from 'yup';
 import {
-  renderForm, renderRss, renderModal,
+  renderForm, renderFeed, renderModal, renderPostBlock,
 } from './view.js';
 import {
   formHandler, postHandler,
@@ -18,7 +18,8 @@ const app = () => {
       state: '',
       error: '',
     },
-    rss: [],
+    feeds: [],
+    posts: [],
     modals: {
       clickedId: '',
       watchedPosts: [],
@@ -60,12 +61,14 @@ const app = () => {
     const watchedState = onChange(state, (path) => {
       switch (path) {
         case 'formState.state':
-          renderForm(formContainer, state);
+          renderForm(formContainer, watchedState);
           break;
-        case 'rss':
-          renderRss(rssContainer, watchedState);
+        case 'feeds':
+          renderFeed(rssContainer, watchedState);
+          break;
+        case 'posts':
+          renderPostBlock(watchedState);
           postHandler(watchedState, rssContainer);
-          update(rssContainer, watchedState, 5000);
           break;
         case 'modals.clickedId':
           renderModal(modalContainer, watchedState);
