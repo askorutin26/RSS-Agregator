@@ -111,119 +111,119 @@ export const renderForm = (form, state) => {
 };
 
 export const renderPostBlock = (state) => {
-  const postContainer = document.createElement('div');
-  postContainer.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'post');
-
-  const divContainer = document.createElement('div');
-  divContainer.classList.add('card', 'border-0');
-
-  const divCard = document.createElement('div');
-  divCard.classList.add('card-body');
-  const h2 = document.createElement('h2');
-  h2.classList.add('card-title', 'h4');
-  h2.textContent = i18next.t('posts');
-  divCard.append(h2);
-  divContainer.append(divCard);
-
-  const ul = document.createElement('ul');
-  ul.classList.add('list-group', 'border-0', 'rounded-0');
-
-  const { currentURL } = state.formState;
   const { posts } = state;
 
-  const rss = posts.find(({ url }) => url === currentURL);
-  const { feedID, articles } = rss;
-  console.log('RSS');
-  console.log(rss);
+  // eslint-disable-next-line array-callback-return
+  posts.map((elem) => {
+    const { feedID, articles } = elem;
+    const postContainer = document.createElement('div');
+    postContainer.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'post');
 
-  const liCollection = articles.map((elem) => {
-    const { id, post } = elem;
-    const li = document.createElement('li');
-    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-    const a = document.createElement('a');
-    a.setAttribute('href', post.link);
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener', 'noreferrer');
-    a.setAttribute('id', id);
-    a.setAttribute('feed-id', feedID);
-    a.setAttribute('data-id', id);
-    if (state.modals.watchedPosts.has(id)) {
-      a.classList.add('fw-normal');
-    } else { a.classList.add('fw-bold'); }
-    a.textContent = post.title;
-    const button = document.createElement('button');
-    button.setAttribute('type', 'button');
-    button.setAttribute('data-bs-toggle', 'modal');
-    button.setAttribute('data-bs-target', '#modal');
-    button.setAttribute('data-id', id);
-    button.setAttribute('id', id);
-    button.setAttribute('feed-id', feedID);
-    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.textContent = i18next.t('postBtn');
-    li.append(a);
-    li.append(button);
-    return li;
+    const divContainer = document.createElement('div');
+    divContainer.classList.add('card', 'border-0');
+
+    const divCard = document.createElement('div');
+    divCard.classList.add('card-body');
+    const h2 = document.createElement('h2');
+    h2.classList.add('card-title', 'h4');
+    h2.textContent = i18next.t('posts');
+    divCard.append(h2);
+    divContainer.append(divCard);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group', 'border-0', 'rounded-0');
+
+    const liCollection = articles.map(({ postId, title, link }) => {
+      const li = document.createElement('li');
+      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+      const a = document.createElement('a');
+      a.setAttribute('href', link);
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener', 'noreferrer');
+      a.setAttribute('id', postId);
+      a.setAttribute('feed-id', feedID);
+      a.setAttribute('data-id', postId);
+      if (state.modals.watchedPosts.has(postId)) {
+        a.classList.add('fw-normal');
+      } else { a.classList.add('fw-bold'); }
+      a.textContent = title;
+      const button = document.createElement('button');
+      button.setAttribute('type', 'button');
+      button.setAttribute('data-bs-toggle', 'modal');
+      button.setAttribute('data-bs-target', '#modal');
+      button.setAttribute('data-id', postId);
+      button.setAttribute('id', postId);
+      button.setAttribute('feed-id', feedID);
+      button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      button.textContent = i18next.t('postBtn');
+      li.append(a);
+      li.append(button);
+      return li;
+    });
+
+    ul.append(...liCollection);
+    divContainer.append(ul);
+    postContainer.append(divContainer);
+    const rssContainer = document.querySelector(`div.${feedID}`);
+    rssContainer.append(postContainer);
   });
-  ul.append(...liCollection);
-  divContainer.append(ul);
-  postContainer.append(divContainer);
-  const rssContainer = document.querySelector(`div.${feedID}`);
-  rssContainer.append(postContainer);
 };
 
 export const renderFeed = (container, state) => {
-  const { currentURL } = state.formState;
-  const feed = state.feeds.find(({ url }) => url === currentURL);
-  const { feedTitle, feedDescription, feedID } = feed;
+  const { feeds } = state;
+  container.textContent = '';
+  // eslint-disable-next-line array-callback-return
+  feeds.map(({ id, feedTitle, feedDescription }) => {
+    const feedContainer = document.createElement('div');
+    feedContainer.classList.add('col-md-10', 'col-lg-2', 'mx-auto', 'feed');
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('row', id);
+    const divCard = document.createElement('div');
+    divCard.classList.add('card-border-0');
 
-  const rowDiv = document.createElement('div');
-  rowDiv.classList.add('row', feedID);
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
 
-  const feedContainer = document.createElement('div');
-  feedContainer.classList.add('col-md-10', 'col-lg-2', 'mx-auto', 'feed');
+    const cardTitle = document.createElement('h2');
+    cardTitle.classList.add('cad-title', 'h4');
+    cardTitle.textContent = i18next.t('feeds');
+    cardBody.append(cardTitle);
 
-  const divCard = document.createElement('div');
-  divCard.classList.add('card-border-0');
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group', 'border-0', 'rounded-0');
 
-  const cardBody = document.createElement('div');
-  cardBody.classList.add('card-body');
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'border-0', 'border-end-0');
+    const h3 = document.createElement('h3');
 
-  const cardTitle = document.createElement('h2');
-  cardTitle.classList.add('cad-title', 'h4');
-  cardTitle.textContent = i18next.t('feeds');
-  cardBody.append(cardTitle);
+    h3.classList.add('h5', 'm-0');
+    h3.textContent = feedTitle;
 
-  const ul = document.createElement('ul');
-  ul.classList.add('list-group', 'border-0', 'rounded-0');
+    const p = document.createElement('p');
+    p.classList.add('m-0', 'small', 'text-black-50');
+    p.textContent = feedDescription;
+    li.append(h3);
+    li.append(p);
+    ul.append(li);
 
-  const li = document.createElement('li');
-  li.classList.add('list-group-item', 'border-0', 'border-end-0');
-  const h3 = document.createElement('h3');
+    divCard.append(cardBody);
+    divCard.append(ul);
+    feedContainer.append(divCard);
+    rowDiv.prepend(feedContainer);
 
-  h3.classList.add('h5', 'm-0');
-  h3.textContent = feedTitle;
-
-  const p = document.createElement('p');
-  p.classList.add('m-0', 'small', 'text-black-50');
-  p.textContent = feedDescription;
-  li.append(h3);
-  li.append(p);
-  ul.append(li);
-
-  divCard.append(cardBody);
-  divCard.append(ul);
-  feedContainer.append(divCard);
-  rowDiv.append(feedContainer);
-
-  container.prepend(rowDiv);
+    container.append(rowDiv);
+  });
 };
 
 export const renderModal = (container, state) => {
   const { clickedId } = state.modals;
   const { posts } = state;
+  console.log(posts);
+  console.log(clickedId);
 
-  const currentRss = posts.find(({ articles }) => articles.find(({ id }) => id === clickedId));
-  const currentPost = currentRss.articles.find(({ id }) => id === clickedId).post;
+  const rss = posts.find(({ articles }) => articles.find(({ postId }) => postId === clickedId));
+  console.log(rss);
+  const currentPost = rss.articles.find(({ postId }) => postId === clickedId);
 
   const { title, link, description } = currentPost;
   const header = container.querySelector('.modal-header');

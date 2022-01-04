@@ -4,28 +4,28 @@ import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
 
 const loadPosts = (state) => {
-  console.log(state);
   const watchedState = state;
   watchedState.formState.state = 'loading';
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     try {
       const rssData = parseRSS(response.data.contents);
+      console.log(rssData);
       const feedTitle = rssData.title;
       const feedDescription = rssData.description;
       const feedPosts = rssData.postElems;
       const feed = {
-        feedID: _.uniqueId('feed_'),
+        id: _.uniqueId('feed_'),
         feedTitle,
         feedDescription,
         url,
       };
-      const articles = feedPosts.map((post) => {
-        const id = _.uniqueId('post_');
-        return { id, post };
-      });
+      const articles = feedPosts.map((post) => ({
+        postId: _.uniqueId('post_'),
+        ...post,
+      }));
       const rss = {
-        feedID: feed.feedID,
+        feedID: feed.id,
         url,
         articles,
       };
