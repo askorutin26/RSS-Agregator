@@ -22,7 +22,7 @@ const app = () => {
     posts: [],
     modals: {
       clickedId: '',
-      watchedPosts: [],
+      watchedPosts: new Set(),
     },
   };
   i18n.use(LanguageDetector).init({

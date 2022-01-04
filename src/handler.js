@@ -69,7 +69,7 @@ export const clickedPostHandler = (state) => {
   const links = document.querySelectorAll('a');
   links.forEach((link) => {
     const id = link.getAttribute('id');
-    if (clickedIds.includes(id)) {
+    if (clickedIds.has(id)) {
       link.classList.add('fw-normal');
       link.classList.remove('fw-bold');
     } else {
@@ -84,12 +84,10 @@ export const postHandler = (state, container) => {
   const { modals } = watchedState;
   container.addEventListener('click', (e) => {
     const postId = e.target.dataset.id;
-    if (postId !== 'undefined' && !modals.watchedPosts.includes(postId)) {
-      modals.watchedPosts.push(postId);
-      const link = document.querySelector(`a[data-id="${postId}"]`);
-      link.classList.add('fw-normal');
-      link.classList.remove('fw-bold');
-    }
+    modals.watchedPosts.add(postId);
+    const link = document.querySelector(`a[data-id="${postId}"]`);
+    link.classList.add('fw-normal');
+    link.classList.remove('fw-bold');
     modals.clickedId = postId;
   });
 };

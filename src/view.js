@@ -147,7 +147,7 @@ export const renderPostBlock = (state) => {
     a.setAttribute('id', id);
     a.setAttribute('feed-id', feedID);
     a.setAttribute('data-id', id);
-    if (state.modals.watchedPosts.includes(id)) {
+    if (state.modals.watchedPosts.has(id)) {
       a.classList.add('fw-normal');
     } else { a.classList.add('fw-bold'); }
     a.textContent = post.title;
@@ -168,7 +168,7 @@ export const renderPostBlock = (state) => {
   divContainer.append(ul);
   postContainer.append(divContainer);
   const rssContainer = document.querySelector(`div.${feedID}`);
-  rssContainer.prepend(postContainer);
+  rssContainer.append(postContainer);
 };
 
 export const renderFeed = (container, state) => {
@@ -213,7 +213,7 @@ export const renderFeed = (container, state) => {
   divCard.append(cardBody);
   divCard.append(ul);
   feedContainer.append(divCard);
-  rowDiv.prepend(feedContainer);
+  rowDiv.append(feedContainer);
 
   container.prepend(rowDiv);
 };
