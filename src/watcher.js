@@ -2,6 +2,7 @@ import onChange from 'on-change';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { setLocale } from 'yup';
+import _ from 'lodash';
 import {
   renderForm, renderFeed, renderModal, renderPostBlock,
 } from './view.js';
@@ -9,6 +10,8 @@ import {
   formHandler, postHandler,
 } from './handler.js';
 import locales from './locales/locales.js';
+import makeQueryForRss from './ajax.js';
+import parseRSS from './rssParser.js';
 
 const app = () => {
   const state = {
@@ -46,17 +49,36 @@ const app = () => {
         url: 'invalidURL',
       },
     });
-
     const formContainer = document.querySelector('.rss-form');
     const modalContainer = document.querySelector('div.modal.fade');
     const rssContainer = document.querySelector('.rss-container');
 
-    function update(container, appState, timeout) {
-      setTimeout(() => {
-        renderRss(container, appState);
-        update(container, appState, 5000);
-      }, timeout);
-    }
+    const update = (appState, timeout) => {
+      const { feeds } = appState;
+      const queryPromises = feeds.map(({ url }) => makeQueryForRss(url));
+      Promise.all(queryPromises).then((result) => {
+        result.forEach((queryResult) => {
+          const rssData = parseRSS(queryResult.data.contents);
+          const { rssTitle, postElems } = rssData;
+          const { posts } = appState;
+          const oldPosts = _.filter(posts, { feedTitle: rssTitle });
+          const diff = _.differenceBy(postElems, oldPosts, 'title');
+          const feed = appState.feeds.find(({ title }) => title === rssTitle);
+          const { id } = feed;
+          if (!_.isEmpty(diff)) {
+            diff.forEach((elem) => {
+              posts.unshift({
+                feedID: id,
+                feedTitle: rssTitle,
+                postId: _.uniqueId('post_'),
+                ...elem,
+              });
+            });
+          }
+        });
+        setTimeout(update, timeout, appState, timeout);
+      });
+    };
 
     const watchedState = onChange(state, (path) => {
       switch (path) {
@@ -78,6 +100,7 @@ const app = () => {
       }
     });
     formHandler(watchedState, formContainer);
+    update(watchedState, 5000);
   });
 };
 
