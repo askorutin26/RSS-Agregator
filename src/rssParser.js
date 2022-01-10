@@ -4,7 +4,7 @@ const parseRSS = (xml) => {
   const error = doc.querySelector('parsererror');
   if (error !== null) { throw new Error('An error occured during parsing'); }
   const titleElem = doc.querySelector('title');
-  const title = titleElem.textContent;
+  const rssTitle = titleElem.textContent;
   const descriptionElem = doc.querySelector('description');
   const description = descriptionElem.textContent;
 
@@ -22,7 +22,7 @@ const parseRSS = (xml) => {
   });
 
   return {
-    title,
+    rssTitle,
     description,
     postElems,
   };
