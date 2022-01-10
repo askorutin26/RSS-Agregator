@@ -10,27 +10,24 @@ const loadPosts = (state) => {
   makeQueryForRss(url).then((response) => {
     try {
       const rssData = parseRSS(response.data.contents);
-      console.log(rssData);
-      const feedTitle = rssData.title;
+      const feedTitle = rssData.rssTitle;
       const feedDescription = rssData.description;
       const feedPosts = rssData.postElems;
       const feed = {
         id: _.uniqueId('feed_'),
-        feedTitle,
+        title: feedTitle,
         feedDescription,
         url,
       };
       const articles = feedPosts.map((post) => ({
+        feedID: feed.id,
+        feedTitle: feed.title,
+        url,
         postId: _.uniqueId('post_'),
         ...post,
       }));
-      const rss = {
-        feedID: feed.id,
-        url,
-        articles,
-      };
       watchedState.feeds.unshift(feed);
-      watchedState.posts.unshift(rss);
+      watchedState.posts.unshift(...articles);
       watchedState.formState.previousURLS.push(url);
       watchedState.formState.state = 'finished';
     } catch (error) {
