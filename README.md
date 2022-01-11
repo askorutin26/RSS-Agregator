@@ -12,6 +12,8 @@ RSS-Agregator allows you to read all the latest posts or news that were recently
 ## How to install:
 `$git clone https://github.com/askorutin26/frontend-project-lvl3.git`
 
+`$cd frontend-project-lvl3`
+
 `$make install`
 
 
