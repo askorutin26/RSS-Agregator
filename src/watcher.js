@@ -53,7 +53,7 @@ const app = () => {
     const modalContainer = document.querySelector('div.modal.fade');
     const rssContainer = document.querySelector('.rss-container');
 
-    const update = (appState, timeout) => {
+    const updateRss = (appState, timeout) => {
       const { feeds } = appState;
       const queryPromises = feeds.map(({ url }) => makeQueryForRss(url));
       Promise.all(queryPromises).then((result) => {
@@ -76,7 +76,7 @@ const app = () => {
             });
           }
         });
-        setTimeout(update, timeout, appState, timeout);
+        setTimeout(updateRss, timeout, appState, timeout);
       });
     };
 
@@ -100,7 +100,7 @@ const app = () => {
       }
     });
     formHandler(watchedState, formContainer);
-    update(watchedState, 5000);
+    updateRss(watchedState, 5000);
   });
 };
 
