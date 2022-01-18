@@ -1,7 +1,8 @@
 import * as yup from 'yup';
 
-const validateURL = (url, urlArr) => {
-  const schema = yup.string().url().required().notOneOf(urlArr);
-  return schema.validate(url);
+const validateURL = (normalizedUrl, state) => {
+  const existingUrls = state.feeds.map(({ url }) => url);
+  const schema = yup.string().url().required().notOneOf(existingUrls);
+  return schema.validate(normalizedUrl);
 };
 export default validateURL;

@@ -48,11 +48,10 @@ export const formHandler = (state, form) => {
     const input = form.querySelector('input');
     const { value } = input;
     const normalizedURL = value.trim();
-    const urlArr = watchedState.formState.previousURLS;
     watchedState.formState.currentURL = normalizedURL;
     watchedState.formState.state = 'filling';
     watchedState.formState.error = '';
-    validateURL(normalizedURL, urlArr).then(() => {
+    validateURL(normalizedURL, watchedState).then(() => {
       loadPosts(watchedState, form);
     }).catch((error) => {
       watchedState.formState.error = error.message;
