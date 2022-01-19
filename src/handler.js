@@ -9,9 +9,7 @@ const loadPosts = (state) => {
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data.contents);
-    const feedTitle = rssData.rssTitle;
-    const feedDescription = rssData.description;
-    const feedPosts = rssData.postElems;
+    const { rssTitle: feedTitle, description: feedDescription, postElems: feedPosts } = rssData;
     const feed = {
       id: _.uniqueId('feed_'),
       title: feedTitle,
