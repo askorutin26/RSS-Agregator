@@ -53,31 +53,29 @@ const app = () => {
     const modalContainer = document.querySelector('div.modal.fade');
     const rssContainer = document.querySelector('.rss-container');
 
+    const updateFeed = (feed, watchedState) => {
+      const { url, id } = feed;
+      const { posts } = watchedState;
+      const promise = makeQueryForRss(url);
+      promise.then((result) => {
+        const rssData = parseRSS(result.data.contents);
+        const { rssTitle, postElems } = rssData;
+        const oldPosts = _.filter(posts, { feedTitle: rssTitle });
+        const diff = _.differenceBy(postElems, oldPosts, 'title');
+        const newPosts = diff.map((post) => ({
+          feedID: id,
+          feedTitle: rssTitle,
+          postId: _.uniqueId('post_'),
+          ...post,
+        }));
+        posts.unshift(...newPosts);
+      });
+    };
+
     const updateRss = (appState, timeout) => {
       const { feeds } = appState;
-      const queryPromises = feeds.map(({ url }) => makeQueryForRss(url));
-      Promise.all(queryPromises).then((result) => {
-        result.forEach((queryResult) => {
-          const rssData = parseRSS(queryResult.data.contents);
-          const { rssTitle, postElems } = rssData;
-          const { posts } = appState;
-          const oldPosts = _.filter(posts, { feedTitle: rssTitle });
-          const diff = _.differenceBy(postElems, oldPosts, 'title');
-          const feed = appState.feeds.find(({ title }) => title === rssTitle);
-          const { id } = feed;
-          if (!_.isEmpty(diff)) {
-            diff.forEach((elem) => {
-              posts.unshift({
-                feedID: id,
-                feedTitle: rssTitle,
-                postId: _.uniqueId('post_'),
-                ...elem,
-              });
-            });
-          }
-        });
-        setTimeout(updateRss, timeout, appState, timeout);
-      });
+      const promises = feeds.map((feed) => updateFeed(feed, appState));
+      Promise.all(promises).then(setTimeout(updateRss, timeout, appState, timeout));
     };
 
     const watchedState = onChange(state, (path) => {
