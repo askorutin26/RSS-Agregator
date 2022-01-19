@@ -53,21 +53,6 @@ export const formHandler = (state, form) => {
   });
 };
 
-export const clickedPostHandler = (state) => {
-  const clickedIds = state.modals.watchedPosts;
-  const links = document.querySelectorAll('a');
-  links.forEach((link) => {
-    const id = link.getAttribute('id');
-    if (clickedIds.has(id)) {
-      link.classList.add('fw-normal');
-      link.classList.remove('fw-bold');
-    } else {
-      link.classList.add('fw-bold');
-      link.classList.remove('fw-normal');
-    }
-  });
-};
-
 export const postHandler = (state, container) => {
   const watchedState = state;
   const { modals } = watchedState;
