@@ -73,9 +73,15 @@ const app = () => {
     };
 
     const updateRss = (appState, timeout) => {
-      const { feeds } = appState;
-      const promises = feeds.map((feed) => updateFeed(feed, appState));
-      Promise.all(promises).then(setTimeout(updateRss, timeout, appState, timeout));
+      const stateToWatch = appState;
+      const { feeds } = stateToWatch;
+      const promises = feeds.map((feed) => updateFeed(feed, stateToWatch));
+      Promise.all(promises).then(setTimeout(updateRss, timeout, stateToWatch, timeout))
+        .catch((e) => {
+          const error = e.isAxiosError ? 'newWorkError' : 'parsingError';
+          stateToWatch.formState.error = error;
+          stateToWatch.formState.state = 'error';
+        });
     };
 
     const watchedState = onChange(state, (path) => {
