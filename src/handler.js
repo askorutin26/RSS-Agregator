@@ -8,35 +8,30 @@ const loadPosts = (state) => {
   watchedState.formState.state = 'loading';
   const url = watchedState.formState.currentURL;
   makeQueryForRss(url).then((response) => {
-    try {
-      const rssData = parseRSS(response.data.contents);
-      const feedTitle = rssData.rssTitle;
-      const feedDescription = rssData.description;
-      const feedPosts = rssData.postElems;
-      const feed = {
-        id: _.uniqueId('feed_'),
-        title: feedTitle,
-        feedDescription,
-        url,
-      };
-      const articles = feedPosts.map((post) => ({
-        feedID: feed.id,
-        feedTitle: feed.title,
-        url,
-        postId: _.uniqueId('post_'),
-        ...post,
-      }));
-      watchedState.feeds.unshift(feed);
-      watchedState.posts.unshift(...articles);
-      watchedState.formState.previousURLS.push(url);
-      watchedState.formState.state = 'finished';
-    } catch (error) {
-      console.log(error.message);
-      watchedState.formState.error = 'parsingError';
-      watchedState.formState.state = 'error';
-    }
-  }).catch(() => {
-    watchedState.formState.error = 'networkError';
+    const rssData = parseRSS(response.data.contents);
+    const feedTitle = rssData.rssTitle;
+    const feedDescription = rssData.description;
+    const feedPosts = rssData.postElems;
+    const feed = {
+      id: _.uniqueId('feed_'),
+      title: feedTitle,
+      feedDescription,
+      url,
+    };
+    const articles = feedPosts.map((post) => ({
+      feedID: feed.id,
+      feedTitle: feed.title,
+      url,
+      postId: _.uniqueId('post_'),
+      ...post,
+    }));
+    watchedState.feeds.unshift(feed);
+    watchedState.posts.unshift(...articles);
+    watchedState.formState.previousURLS.push(url);
+    watchedState.formState.state = 'finished';
+  }).catch((e) => {
+    const error = e.isAxiosError ? 'newWorkError' : 'parsingError';
+    watchedState.formState.error = error;
     watchedState.formState.state = 'error';
   });
 };
