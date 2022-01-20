@@ -94,7 +94,6 @@ const app = () => {
           break;
         case 'posts':
           renderPostBlock(watchedState);
-          postHandler(watchedState, rssContainer);
           break;
         case 'modals.clickedId':
           renderModal(modalContainer, watchedState);
@@ -104,6 +103,7 @@ const app = () => {
       }
     });
     formHandler(watchedState, formContainer);
+    postHandler(watchedState, rssContainer);
     updateRss(watchedState, 5000);
   });
 };

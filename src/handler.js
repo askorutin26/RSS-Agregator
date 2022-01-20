@@ -58,10 +58,12 @@ export const postHandler = (state, container) => {
   const { modals } = watchedState;
   container.addEventListener('click', (e) => {
     const postId = e.target.dataset.id;
-    modals.watchedPosts.add(postId);
-    const link = document.querySelector(`a[data-id="${postId}"]`);
-    link.classList.add('fw-normal');
-    link.classList.remove('fw-bold');
-    modals.clickedId = postId;
+    if (postId !== undefined) {
+      modals.watchedPosts.add(postId);
+      const link = document.querySelector(`a[data-id="${postId}"]`);
+      link.classList.add('fw-normal');
+      link.classList.remove('fw-bold');
+      modals.clickedId = postId;
+    }
   });
 };
