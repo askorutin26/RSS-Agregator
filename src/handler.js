@@ -25,7 +25,6 @@ const loadPosts = (state) => {
     }));
     watchedState.feeds.unshift(feed);
     watchedState.posts.unshift(...articles);
-    watchedState.formState.previousURLS.push(url);
     watchedState.formState.state = 'finished';
   }).catch((e) => {
     const error = e.isAxiosError ? 'newWorkError' : 'parsingError';
