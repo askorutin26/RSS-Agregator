@@ -12,6 +12,7 @@ import {
 import locales from './locales/locales.js';
 import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser.js';
+import getErrName from './errorName';
 
 const app = () => {
   const state = {
@@ -77,8 +78,8 @@ const app = () => {
       const { feeds } = stateToWatch;
       const promises = feeds.map((feed) => updateFeed(feed, stateToWatch));
       Promise.all(promises).then(setTimeout(updateRss, timeout, stateToWatch, timeout))
-        .catch((e) => {
-          const error = e.isAxiosError ? 'newWorkError' : 'parsingError';
+        .catch((err) => {
+          const error = getErrName(err);
           stateToWatch.formState.error = error;
           stateToWatch.formState.state = 'error';
         });

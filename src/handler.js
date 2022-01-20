@@ -2,6 +2,7 @@ import _ from 'lodash';
 import validateURL from './urlValidator';
 import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
+import getErrName from './errorName';
 
 const loadPosts = (state) => {
   const watchedState = state;
@@ -26,8 +27,8 @@ const loadPosts = (state) => {
     watchedState.feeds.unshift(feed);
     watchedState.posts.unshift(...articles);
     watchedState.formState.state = 'finished';
-  }).catch((e) => {
-    const error = e.isAxiosError ? 'newWorkError' : 'parsingError';
+  }).catch((err) => {
+    const error = getErrName(err);
     watchedState.formState.error = error;
     watchedState.formState.state = 'error';
   });
