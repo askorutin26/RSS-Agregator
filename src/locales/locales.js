@@ -2,7 +2,7 @@ export default {
   en: {
     translation: {
       title: 'RSS Agregator',
-      description: 'Start reading Rss today!',
+      description: 'Start reading RSS today!',
       placeholder: 'RSS link',
       addBtn: 'Add',
       example: 'Example: https://ru.hexlet.io/lessons.rss',
