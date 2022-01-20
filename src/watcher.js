@@ -1,6 +1,5 @@
 import onChange from 'on-change';
 import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import { setLocale } from 'yup';
 import _ from 'lodash';
 import {
@@ -29,7 +28,7 @@ const app = () => {
     },
   };
   const i18nInstance = i18n.createInstance();
-  i18nInstance.use(LanguageDetector).init({
+  i18nInstance.init({
     fallbackLng: 'ru',
     debug: true,
     resources: locales,
