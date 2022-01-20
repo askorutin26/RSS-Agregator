@@ -17,7 +17,6 @@ const app = () => {
   const state = {
     formState: {
       currentURL: '',
-      previousURLS: [],
       state: '',
       error: '',
     },
