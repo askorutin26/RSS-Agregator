@@ -1,15 +1,14 @@
 /* eslint-disable no-param-reassign */
-import i18next from 'i18next';
 import _ from 'lodash';
 
-const createInput = (state) => {
+const createInput = (state, i18n) => {
   const input = document.createElement('input');
   input.setAttribute('type', 'text');
   input.setAttribute('id', 'url-input');
   input.setAttribute('name', 'url');
   input.setAttribute('required', true);
   input.setAttribute('autofocus', true);
-  input.setAttribute('placeholder', i18next.t('placeholder'));
+  input.setAttribute('placeholder', i18n.t('placeholder'));
   input.setAttribute('aria-label', 'url');
   input.setAttribute('autocomplee', 'off');
   input.setAttribute('aria-describedly', 'button-addon');
@@ -32,22 +31,22 @@ const createInput = (state) => {
   return input;
 };
 
-const createResultBlock = (state) => {
+const createResultBlock = (state, i18n) => {
   const p = document.createElement('p');
   p.classList.add('feedback', 'm-0', 'position-absolut', 'small');
 
   if (state.formState.state === 'error') {
-    p.textContent = i18next.t(`validation.${state.formState.error}`);
+    p.textContent = i18n.t(`validation.${state.formState.error}`);
     p.classList.add('text-danger');
   } else {
-    p.textContent = i18next.t(`validation.${state.formState.state}`);
+    p.textContent = i18n.t(`validation.${state.formState.state}`);
     p.classList.add('text-success');
   }
 
   return p;
 };
 
-const createAddBtn = (state) => {
+const createAddBtn = (state, i18n) => {
   const button = document.createElement('button');
   switch (state.formState.state) {
     case 'loading':
@@ -62,29 +61,29 @@ const createAddBtn = (state) => {
   button.setAttribute('type', 'submit');
   button.setAttribute('aria-label', 'add');
   button.classList.add('h-100', 'btn', 'btn-lg', 'btn-primary', 'px-sm-5');
-  button.textContent = i18next.t('addBtn');
+  button.textContent = i18n.t('addBtn');
   return button;
 };
-const createLabel = () => {
+const createLabel = (i18n) => {
   const label = document.createElement('label');
   label.setAttribute('for', 'url-input');
-  label.textContent = i18next.t('placeholder');
+  label.textContent = i18n.t('placeholder');
   return label;
 };
 
-const createExampleBlock = () => {
+const createExampleBlock = (i18n) => {
   const p = document.createElement('p');
   p.classList.add('mt-2', 'mb-0', 'text-muted');
-  p.textContent = i18next.t('example');
+  p.textContent = i18n.t('example');
   return p;
 };
 
-export const renderForm = (form, state) => {
-  const input = createInput(state);
-  const addBtn = createAddBtn(state);
-  const label = createLabel();
-  const example = createExampleBlock();
-  const result = createResultBlock(state);
+export const renderForm = (form, state, i18n) => {
+  const input = createInput(state, i18n);
+  const addBtn = createAddBtn(state, i18n);
+  const label = createLabel(i18n);
+  const example = createExampleBlock(i18n);
+  const result = createResultBlock(state, i18n);
   const divRow = document.createElement('div');
   divRow.classList.add('row');
 
@@ -111,7 +110,7 @@ export const renderForm = (form, state) => {
   form.append(result);
 };
 
-export const renderPostBlock = (state) => {
+export const renderPostBlock = (state, i18n) => {
   const { posts } = state;
   const uniqFeedIds = _.uniqBy(posts, 'feedID');
   uniqFeedIds.forEach(({ feedID }) => {
@@ -126,7 +125,7 @@ export const renderPostBlock = (state) => {
 
     const h2 = document.createElement('h2');
     h2.classList.add('card-title', 'h4');
-    h2.textContent = i18next.t('posts');
+    h2.textContent = i18n.t('posts');
     divCard.append(h2);
     divContainer.append(divCard);
 
@@ -162,7 +161,7 @@ export const renderPostBlock = (state) => {
       button.setAttribute('id', postId);
       button.setAttribute('feed-id', feedID);
       button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      button.textContent = i18next.t('postBtn');
+      button.textContent = i18n.t('postBtn');
       li.append(a);
       li.append(button);
       ul.append(li);
@@ -177,7 +176,7 @@ export const renderPostBlock = (state) => {
   });
 };
 
-export const renderFeed = (container, state) => {
+export const renderFeed = (container, state, i18n) => {
   const { feeds } = state;
   container.textContent = '';
   feeds.forEach(({ id, title, feedDescription }) => {
@@ -193,7 +192,7 @@ export const renderFeed = (container, state) => {
 
     const cardTitle = document.createElement('h2');
     cardTitle.classList.add('card-title', 'h4');
-    cardTitle.textContent = i18next.t('feeds');
+    cardTitle.textContent = i18n.t('feeds');
     cardBody.append(cardTitle);
 
     const ul = document.createElement('ul');

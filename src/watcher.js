@@ -28,7 +28,8 @@ const app = () => {
       watchedPosts: new Set(),
     },
   };
-  i18n.use(LanguageDetector).init({
+  const i18nInstance = i18n.createInstance();
+  i18nInstance.use(LanguageDetector).init({
     fallbackLng: 'ru',
     debug: true,
     resources: locales,
@@ -87,13 +88,13 @@ const app = () => {
     const watchedState = onChange(state, (path) => {
       switch (path) {
         case 'formState.state':
-          renderForm(formContainer, watchedState);
+          renderForm(formContainer, watchedState, i18nInstance);
           break;
         case 'feeds':
-          renderFeed(rssContainer, watchedState);
+          renderFeed(rssContainer, watchedState, i18nInstance);
           break;
         case 'posts':
-          renderPostBlock(watchedState);
+          renderPostBlock(watchedState, i18nInstance);
           break;
         case 'modals.clickedId':
           renderModal(modalContainer, watchedState);
