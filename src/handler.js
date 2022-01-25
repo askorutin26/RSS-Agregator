@@ -42,7 +42,6 @@ export const formHandler = (state, form) => {
     const { value } = input;
     const normalizedURL = value.trim();
     watchedState.formState.currentURL = normalizedURL;
-    watchedState.formState.state = 'filling';
     watchedState.formState.error = '';
     validateURL(normalizedURL, watchedState).then(() => {
       loadPosts(watchedState, form);

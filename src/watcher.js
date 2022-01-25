@@ -14,10 +14,10 @@ import parseRSS from './rssParser.js';
 import getErrName from './errorName';
 
 const app = () => {
-  const state = {
+  const initState = {
     formState: {
       currentURL: '',
-      state: '',
+      state: 'filling',
       error: '',
     },
     feeds: [],
@@ -84,7 +84,7 @@ const app = () => {
         });
     };
 
-    const watchedState = onChange(state, (path) => {
+    const watchedState = onChange(initState, (path) => {
       switch (path) {
         case 'formState.state':
           renderForm(formContainer, watchedState, i18nInstance);
