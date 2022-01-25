@@ -5,6 +5,6 @@ const getErrName = (error) => {
   if (error.isAxiosError) {
     return 'networkError';
   }
-  return 'defaultError';
+  return 'unknownError';
 };
 export default getErrName;
