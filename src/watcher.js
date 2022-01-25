@@ -11,7 +11,6 @@ import {
 import locales from './locales/locales.js';
 import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser.js';
-import getErrName from './utils';
 
 const app = () => {
   const initState = {
@@ -51,6 +50,8 @@ const app = () => {
     });
     const formContainer = document.querySelector('.rss-form');
     const modalContainer = document.querySelector('div.modal.fade');
+    const feedsContainer = document.querySelector('div .posts');
+    const postsContainer = document.querySelector('div .feeds');
     const rssContainer = document.querySelector('.rss-container');
 
     const updateFeed = (feed, watchedState) => {
@@ -76,12 +77,7 @@ const app = () => {
       const stateToWatch = appState;
       const { feeds } = stateToWatch;
       const promises = feeds.map((feed) => updateFeed(feed, stateToWatch));
-      Promise.all(promises).finally(setTimeout(updateRss, timeout, stateToWatch, timeout))
-        .catch((err) => {
-          const error = getErrName(err);
-          stateToWatch.formState.error = error;
-          stateToWatch.formState.state = 'error';
-        });
+      Promise.all(promises).finally(setTimeout(updateRss, timeout, stateToWatch, timeout));
     };
 
     const watchedState = onChange(initState, (path) => {
@@ -90,10 +86,10 @@ const app = () => {
           renderForm(formContainer, watchedState, i18nInstance);
           break;
         case 'feeds':
-          renderFeed(rssContainer, watchedState, i18nInstance);
+          renderFeed(feedsContainer, watchedState, i18nInstance);
           break;
         case 'posts':
-          renderPostBlock(watchedState, i18nInstance);
+          renderPostBlock(postsContainer, watchedState, i18nInstance);
           break;
         case 'modals.clickedId':
           renderModal(modalContainer, watchedState);
