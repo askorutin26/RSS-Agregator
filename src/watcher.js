@@ -11,7 +11,7 @@ import {
 import locales from './locales/locales.js';
 import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser.js';
-import getErrName from './errorName';
+import getErrName from './utils';
 
 const app = () => {
   const initState = {
@@ -76,7 +76,7 @@ const app = () => {
       const stateToWatch = appState;
       const { feeds } = stateToWatch;
       const promises = feeds.map((feed) => updateFeed(feed, stateToWatch));
-      Promise.all(promises).then(setTimeout(updateRss, timeout, stateToWatch, timeout))
+      Promise.all(promises).finally(setTimeout(updateRss, timeout, stateToWatch, timeout))
         .catch((err) => {
           const error = getErrName(err);
           stateToWatch.formState.error = error;
