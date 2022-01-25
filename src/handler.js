@@ -2,13 +2,13 @@ import _ from 'lodash';
 import validateURL from './urlValidator';
 import makeQueryForRss from './ajax.js';
 import parseRSS from './rssParser';
-import getErrName from './errorName';
+import getErrName from './utils';
 
 const loadPosts = (state) => {
   const watchedState = state;
   watchedState.formState.state = 'loading';
   const url = watchedState.formState.currentURL;
-  makeQueryForRss(url).then((response) => {
+  return makeQueryForRss(url).then((response) => {
     const rssData = parseRSS(response.data.contents);
     const { rssTitle: feedTitle, description: feedDescription, postElems: feedPosts } = rssData;
     const feed = {
@@ -27,10 +27,6 @@ const loadPosts = (state) => {
     watchedState.feeds.unshift(feed);
     watchedState.posts.unshift(...articles);
     watchedState.formState.state = 'finished';
-  }).catch((err) => {
-    const error = getErrName(err);
-    watchedState.formState.error = error;
-    watchedState.formState.state = 'error';
   });
 };
 
@@ -43,10 +39,12 @@ export const formHandler = (state, form) => {
     const normalizedURL = value.trim();
     watchedState.formState.currentURL = normalizedURL;
     watchedState.formState.error = '';
+    // eslint-disable-next-line arrow-body-style
     validateURL(normalizedURL, watchedState).then(() => {
-      loadPosts(watchedState, form);
-    }).catch((error) => {
-      watchedState.formState.error = error.message;
+      return loadPosts(watchedState, form);
+    }).catch((err) => {
+      const error = getErrName(err);
+      watchedState.formState.error = error;
       watchedState.formState.state = 'error';
     });
   });
