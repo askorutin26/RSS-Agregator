@@ -110,13 +110,10 @@ export const renderForm = (form, state, i18n) => {
   form.append(result);
 };
 
-export const renderPostBlock = (state, i18n) => {
+export const renderPostBlock = (container, state, i18n) => {
   const { posts } = state;
   const uniqFeedIds = _.uniqBy(posts, 'feedID');
   uniqFeedIds.forEach(({ feedID }) => {
-    const postContainer = document.createElement('div');
-    postContainer.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'posts');
-
     const divContainer = document.createElement('div');
     divContainer.classList.add('card', 'border-0');
 
@@ -129,7 +126,6 @@ export const renderPostBlock = (state, i18n) => {
     divCard.append(h2);
     divContainer.append(divCard);
 
-    const rssContainer = document.querySelector(`div.${feedID}`);
     const currentPosts = _.filter(posts, { feedID });
 
     currentPosts.forEach((elem) => {
@@ -166,12 +162,13 @@ export const renderPostBlock = (state, i18n) => {
       li.append(button);
       ul.append(li);
       divContainer.append(ul);
-      postContainer.append(divContainer);
-      const oldPostContainer = rssContainer.querySelector('div.posts');
+      container.textContent = '';
+      container.append(divContainer);
+      const oldPostContainer = container.querySelector('div.posts');
       if (oldPostContainer !== null) {
-        oldPostContainer.replaceWith(postContainer);
-        rssContainer.append(postContainer);
-      } else { rssContainer.append(postContainer); }
+        oldPostContainer.replaceWith(divContainer);
+        container.append(divContainer);
+      } else { container.append(divContainer); }
     });
   });
 };
@@ -179,11 +176,7 @@ export const renderPostBlock = (state, i18n) => {
 export const renderFeed = (container, state, i18n) => {
   const { feeds } = state;
   container.textContent = '';
-  feeds.forEach(({ id, title, feedDescription }) => {
-    const feedContainer = document.createElement('div');
-    feedContainer.classList.add('col-md-10', 'col-lg-2', 'mx-auto', 'feed');
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('row', id);
+  feeds.forEach(({ title, feedDescription }) => {
     const divCard = document.createElement('div');
     divCard.classList.add('card-border-0');
 
@@ -214,10 +207,8 @@ export const renderFeed = (container, state, i18n) => {
 
     divCard.append(cardBody);
     divCard.append(ul);
-    feedContainer.append(divCard);
-
-    rowDiv.prepend(feedContainer);
-    container.append(rowDiv);
+    container.textContent = '';
+    container.append(divCard);
   });
 };
 
