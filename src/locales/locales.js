@@ -15,7 +15,7 @@ export default {
         networkError: 'Network error',
         parsingError: 'Resourse does not contain valid RSS',
       },
-      feeds: 'Feed',
+      feeds: 'Feeds',
       posts: 'Posts',
       postBtn: 'Watch',
 
@@ -37,7 +37,7 @@ export default {
         networkError: 'Ошибка сети',
         parsingError: 'Ресурс не содержит валидный RSS',
       },
-      feeds: 'Фид',
+      feeds: 'Фиды',
       posts: 'Посты',
       postBtn: 'Просмотр',
     },
