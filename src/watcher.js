@@ -90,6 +90,7 @@ const app = () => {
           renderFeed(feedsContainer, watchedState, i18nInstance);
           break;
         case 'posts':
+        case 'modals.watchedPosts':
           renderPostBlock(postsContainer, watchedState, i18nInstance);
           break;
         case 'modals.clickedId':
