@@ -57,9 +57,6 @@ export const postHandler = (state, container) => {
     const postId = e.target.dataset.id;
     if (postId !== undefined) {
       modals.watchedPosts.add(postId);
-      const link = document.querySelector(`a[data-id="${postId}"]`);
-      link.classList.add('fw-normal');
-      link.classList.remove('fw-bold');
       modals.clickedId = postId;
     }
   });
