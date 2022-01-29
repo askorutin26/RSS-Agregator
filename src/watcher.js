@@ -50,8 +50,8 @@ const app = () => {
     });
     const formContainer = document.querySelector('.rss-form');
     const modalContainer = document.querySelector('div.modal.fade');
-    const feedsContainer = document.querySelector('div .posts');
-    const postsContainer = document.querySelector('div .feeds');
+    const feedsContainer = document.querySelector('div .feeds');
+    const postsContainer = document.querySelector('div .posts');
     const rssContainer = document.querySelector('.rss-container');
 
     const updateFeed = (feed, watchedState) => {
@@ -81,6 +81,7 @@ const app = () => {
     };
 
     const watchedState = onChange(initState, (path) => {
+      console.log(path);
       switch (path) {
         case 'formState.state':
           renderForm(formContainer, watchedState, i18nInstance);

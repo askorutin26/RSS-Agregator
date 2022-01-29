@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import _ from 'lodash';
 
 const createInput = (state, i18n) => {
   const input = document.createElement('input');
@@ -112,82 +111,71 @@ export const renderForm = (form, state, i18n) => {
 
 export const renderPostBlock = (container, state, i18n) => {
   const { posts } = state;
-  const uniqFeedIds = _.uniqBy(posts, 'feedID');
-  uniqFeedIds.forEach(({ feedID }) => {
-    const divContainer = document.createElement('div');
-    divContainer.classList.add('card', 'border-0');
+  const fragment = document.createDocumentFragment();
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
 
-    const divCard = document.createElement('div');
-    divCard.classList.add('card-body');
+  const h2 = document.createElement('h2');
+  h2.classList.add('card-title', 'h4');
+  h2.textContent = i18n.t('posts');
 
-    const h2 = document.createElement('h2');
-    h2.classList.add('card-title', 'h4');
-    h2.textContent = i18n.t('posts');
-    divCard.append(h2);
-    divContainer.append(divCard);
+  cardBody.append(h2);
+  fragment.append(cardBody);
 
-    const currentPosts = _.filter(posts, { feedID });
+  posts.forEach((post) => {
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group', 'border-0', 'rounded-0');
 
-    currentPosts.forEach((elem) => {
-      const ul = document.createElement('ul');
-      ul.classList.add('list-group', 'border-0', 'rounded-0');
+    const {
+      postId, title, link, feedID,
+    } = post;
 
-      const {
-        postId, title, link,
-      } = elem;
-
-      const li = document.createElement('li');
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      const a = document.createElement('a');
-      a.setAttribute('href', link);
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener', 'noreferrer');
-      a.setAttribute('id', postId);
-      a.setAttribute('feed-id', feedID);
-      a.setAttribute('data-id', postId);
-      if (state.modals.watchedPosts.has(postId)) {
-        a.classList.add('fw-normal');
-      } else { a.classList.add('fw-bold'); }
-      a.textContent = title;
-      const button = document.createElement('button');
-      button.setAttribute('type', 'button');
-      button.setAttribute('data-bs-toggle', 'modal');
-      button.setAttribute('data-bs-target', '#modal');
-      button.setAttribute('data-id', postId);
-      button.setAttribute('id', postId);
-      button.setAttribute('feed-id', feedID);
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      button.textContent = i18n.t('postBtn');
-      li.append(a);
-      li.append(button);
-      ul.append(li);
-      divContainer.append(ul);
-      container.textContent = '';
-      container.append(divContainer);
-      const oldPostContainer = container.querySelector('div.posts');
-      if (oldPostContainer !== null) {
-        oldPostContainer.replaceWith(divContainer);
-        container.append(divContainer);
-      } else { container.append(divContainer); }
-    });
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const a = document.createElement('a');
+    a.setAttribute('href', link);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener', 'noreferrer');
+    a.setAttribute('id', postId);
+    a.setAttribute('feed-id', feedID);
+    a.setAttribute('data-id', postId);
+    if (state.modals.watchedPosts.has(postId)) {
+      a.classList.add('fw-normal');
+    } else { a.classList.add('fw-bold'); }
+    a.textContent = title;
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#modal');
+    button.setAttribute('data-id', postId);
+    button.setAttribute('id', postId);
+    button.setAttribute('feed-id', feedID);
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.textContent = i18n.t('postBtn');
+    li.append(a);
+    li.append(button);
+    ul.append(li);
+    fragment.append(ul);
   });
+  container.textContent = '';
+  container.append(fragment);
 };
 
 export const renderFeed = (container, state, i18n) => {
   const { feeds } = state;
-  container.textContent = '';
+  const fragment = document.createDocumentFragment();
+
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('card-title', 'h4');
+  cardTitle.textContent = i18n.t('feeds');
+  cardBody.append(cardTitle);
+
+  fragment.append(cardBody);
+
   feeds.forEach(({ title, feedDescription }) => {
-    const divCard = document.createElement('div');
-    divCard.classList.add('card-border-0');
-
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-
-    const cardTitle = document.createElement('h2');
-    cardTitle.classList.add('card-title', 'h4');
-    cardTitle.textContent = i18n.t('feeds');
-    cardBody.append(cardTitle);
-
     const ul = document.createElement('ul');
     ul.classList.add('list-group', 'border-0', 'rounded-0');
 
@@ -204,12 +192,10 @@ export const renderFeed = (container, state, i18n) => {
     li.append(h3);
     li.append(p);
     ul.append(li);
-
-    divCard.append(cardBody);
-    divCard.append(ul);
-    container.textContent = '';
-    container.append(divCard);
+    fragment.append(ul);
   });
+  container.textContent = '';
+  container.append(fragment);
 };
 
 export const renderModal = (container, state) => {
